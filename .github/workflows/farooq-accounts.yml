@@ -1,0 +1,215 @@
+name: Farooq Remote - account server (linux-arm64)
+
+# FA-020 Farooq Remote, Phase 5 (plan 0-docs/0018 EN + 0019 UR; owner approval A1, 1 Nov 2026).
+# Builds the account server lejianwen/rustdesk-api 2.7 (MIT) and its admin page lejianwen/rustdesk-api-web (MIT)
+# from PINNED source on GitHub's own ARM runner, tests that the program starts and answers, and publishes it as a
+# release of this repository with its SHA256. FR-08-ACCOUNTS.bat installs it on the Oracle VM and checks that SHA256.
+#
+# Runs when this file is pushed to farooq/develop (or from the Actions tab). Nothing else in this repository changes;
+# master stays the upstream mirror. No secrets are used - only this run's own GITHUB_TOKEN, to publish the release.
+
+on:
+  push:
+    branches: [ "farooq/develop" ]
+    paths: [ ".github/workflows/farooq-accounts.yml" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  API_REPO: lejianwen/rustdesk-api
+  API_COMMIT: 222792419f8b55c17b36bf5f423ec5ed7a53e2c4   # tag v2.7, 28 Sep 2025
+  API_VERSION: "2.7"
+  WEB_REPO: lejianwen/rustdesk-api-web
+  WEB_COMMIT: 3998c2a9213fcd047252776d0f0db33e6717026c   # master when v2.7 was released (31 Aug 2025)
+  GO_VERSION: "1.23.10"                                    # the toolchain line of rustdesk-api go.mod
+  NODE_VERSION: "20"                                       # as upstream build.yml
+  RELEASE_TAG: accounts-2.7-1
+  ASSET: farooqremote-accounts-2.7-linux-arm64.tar.gz
+
+jobs:
+  build:
+    name: Build, test, release (linux-arm64)
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 45
+    steps:
+      - name: Source - rustdesk-api (pinned)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ env.API_REPO }}
+          ref: ${{ env.API_COMMIT }}
+          path: api
+          persist-credentials: false
+
+      - name: Source - rustdesk-api-web (pinned)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ env.WEB_REPO }}
+          ref: ${{ env.WEB_COMMIT }}
+          path: web
+          persist-credentials: false
+
+      - name: Check the pinned commits
+        run: |
+          test "$(git -C api rev-parse HEAD)" = "$API_COMMIT"
+          test "$(git -C web rev-parse HEAD)" = "$WEB_COMMIT"
+          echo "rustdesk-api     $(git -C api rev-parse HEAD)"
+          echo "rustdesk-api-web $(git -C web rev-parse HEAD)"
+          uname -m
+
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: false
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Build the admin page (rustdesk-api-web)
+        working-directory: web
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          rm -rf ../api/resources/admin
+          mkdir -p ../api/resources/admin
+          cp -a dist/. ../api/resources/admin/
+          ls -la ../api/resources/admin
+
+      - name: Build the program (static, musl)
+        working-directory: api
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q musl-tools
+          go version
+          go mod tidy
+          echo "$API_VERSION" > resources/version
+          CC=musl-gcc CGO_ENABLED=1 CGO_LDFLAGS="-static" go build -trimpath -ldflags "-s -w" -o apimain ./cmd/apimain.go
+          file apimain || true
+          ls -la apimain
+
+      - name: Test - first start, password reset, answers, wrong and right login
+        working-directory: api
+        run: |
+          set -u
+          T="$RUNNER_TEMP/fr-test"
+          rm -rf "$T"; mkdir -p "$T/conf/admin" "$T/data" "$T/runtime" "$T/resources"
+          cp apimain "$T/"
+          cp -a resources/admin resources/i18n resources/public resources/templates resources/version "$T/resources/"
+          echo "### test {{username}}" > "$T/conf/admin/hello.html"
+          cat > "$T/conf/config.yaml" <<'CONF'
+          lang: "en"
+          app:
+            web-client: 0
+            register: false
+            register-status: 1
+            captcha-threshold: 3
+            ban-threshold: 10
+            show-swagger: 0
+            token-expire: 720h
+            web-sso: false
+            disable-pwd-login: false
+          admin:
+            title: "Farooq Remote"
+            hello-file: "./conf/admin/hello.html"
+            hello: ""
+            id-server-port: 21116
+            relay-server-port: 21117
+          gin:
+            api-addr: "127.0.0.1:21114"
+            mode: "release"
+            resources-path: "resources"
+            trust-proxy: "127.0.0.1"
+          gorm:
+            type: "sqlite"
+            max-idle-conns: 10
+            max-open-conns: 100
+          rustdesk:
+            id-server: "test.invalid:21116"
+            relay-server: "test.invalid:21117"
+            api-server: "https://test.invalid"
+            key: "test-key"
+            key-file: ""
+            personal: 1
+            webclient-magic-queryonline: 0
+            ws-host: ""
+          logger:
+            path: "./runtime/log.txt"
+            level: "info"
+            report-caller: false
+          proxy:
+            enable: false
+            host: ""
+          jwt:
+            key: "ci-only-signing-key"
+            expire-duration: 720h
+          ldap:
+            enable: false
+          CONF
+          cd "$T"
+          PW="ci-$(openssl rand -hex 8)"
+          # first run through the command line: creates the database + the admin, then sets a known password
+          ./apimain -c ./conf/config.yaml reset-admin-pwd "$PW" > reset.out 2>&1
+          test -s data/rustdeskapi.db
+          grep -q "reset password success" runtime/log.txt
+          echo "start-up password lines in the log (expected 1): $(grep -c 'Admin Password Is' runtime/log.txt)"
+          ./apimain -c ./conf/config.yaml > run.out 2>&1 &
+          APID=$!
+          for i in $(seq 1 30); do sleep 1; curl -fs -o /dev/null http://127.0.0.1:21114/api/login-options && break; done
+          code() { curl -s -o /dev/null -w '%{http_code}' "$@"; }
+          test "$(code http://127.0.0.1:21114/api/login-options)" = 200
+          test "$(code http://127.0.0.1:21114/_admin/)" = 200
+          test "$(code http://127.0.0.1:21114/webclient/)" = 404
+          c=$(curl -s -o wrong.json -w '%{http_code}' -H 'Content-Type: application/json' -d '{"username":"admin","password":"wrong-pass-1"}' http://127.0.0.1:21114/api/login)
+          echo "wrong login -> $c $(cat wrong.json)"; test "$c" = 400
+          c=$(curl -s -o right.json -w '%{http_code}' -H 'Content-Type: application/json' -d "{\"username\":\"admin\",\"password\":\"$PW\"}" http://127.0.0.1:21114/api/login)
+          echo "right login -> $c"; test "$c" = 200; grep -q '"access_token"' right.json
+          echo "login-options: $(curl -s http://127.0.0.1:21114/api/login-options)"
+          kill "$APID" || true
+          echo "TEST PASSED"
+
+      - name: Package
+        run: |
+          R=release
+          rm -rf "$R"; mkdir -p "$R/resources" "$R/conf/admin" "$R/data" "$R/runtime"
+          cp api/apimain "$R/"
+          cp -a api/resources/admin api/resources/i18n api/resources/public api/resources/templates api/resources/version "$R/resources/"
+          cp api/conf/config.yaml "$R/conf/config.yaml.upstream"
+          cp api/LICENSE "$R/LICENSE-rustdesk-api.txt"
+          cp web/LICENSE "$R/LICENSE-rustdesk-api-web.txt"
+          {
+            echo "Farooq Remote account server - lejianwen/rustdesk-api $API_VERSION for linux-arm64 (static, musl)"
+            echo "rustdesk-api     https://github.com/$API_REPO commit $API_COMMIT (MIT)"
+            echo "rustdesk-api-web https://github.com/$WEB_REPO commit $WEB_COMMIT (MIT)"
+            echo "built by https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID on $(date -u +%FT%TZ), $(go version)"
+            echo "settings are written on the server by fr-08-accounts.sh; conf/config.yaml.upstream is the original for reference"
+          } > "$R/FAROOQ-BUILD.txt"
+          cat "$R/FAROOQ-BUILD.txt"
+          tar --owner=0 --group=0 --numeric-owner -czf "$ASSET" "$R"
+          sha256sum "$ASSET" | tee SHA256SUMS.txt
+          ls -la "$ASSET"
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "Farooq Remote account server for the Oracle VM (linux-arm64): lejianwen/rustdesk-api $API_VERSION + its admin page,"
+            echo "built from pinned source by run https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID."
+            echo
+            echo "- rustdesk-api: https://github.com/$API_REPO/commit/$API_COMMIT (MIT)"
+            echo "- rustdesk-api-web: https://github.com/$WEB_REPO/commit/$WEB_COMMIT (MIT)"
+            echo "- SHA256: \`$(cut -d' ' -f1 SHA256SUMS.txt)\`"
+            echo
+            echo "Installed by FR-08-ACCOUNTS.bat (FA-020 Phase 5). Not a RustDesk server release."
+          } > notes.md
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "$ASSET" SHA256SUMS.txt --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$RELEASE_TAG" "$ASSET" SHA256SUMS.txt --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+              --title "Farooq Remote accounts $API_VERSION (linux-arm64)" --notes-file notes.md --prerelease
+          fi
+          echo "release: https://github.com/$GITHUB_REPOSITORY/releases/tag/$RELEASE_TAG"
