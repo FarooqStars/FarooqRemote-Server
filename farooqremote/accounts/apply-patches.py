@@ -207,4 +207,10 @@ replace_once(p, 'func (p B64StringCaptchaProvider) Draw(content string) (string,
              '\t// Farooq Remote: our own clear picture (farooq_captcha.go)\n'
              '\treturn FrDrawDigits(content)\n}\n')
 
+# 12. web: the page title in the browser tab is the product's name from the first moment (upstream «Rustdesk API Admin»
+#     until the settings arrive). The logo (src/assets/logo.png) and the tab icon (public/favicon.ico) are Farooq
+#     Remote's own icon, copied from farooqremote/accounts/web/ (owner 1 Nov 2026, the branding files «for icons and logos»).
+replace_once(os.path.join(WEB, 'index.html'), '<title>Rustdesk API Admin</title>', '<title>Farooq Remote</title>')
+replace_once(os.path.join(WEB, 'src/store/app.js'), "title: 'Rustdesk API Admin',", "title: 'Farooq Remote',")
+
 print('== done')

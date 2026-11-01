@@ -21,6 +21,7 @@ stays untouched and the build fails if a patch no longer matches.
 | `api-add/en.add.toml` | 2.7-3: English server messages upstream lacks (sign-up, `LoginBanned`, `UserDisabled`), appended to `en.toml`. |
 | `ci/signup_test.py` | 2.7-3: the build runs the whole sign-up / forgot-password flow with mails written to files. |
 | `api/utils/farooq_captcha.go` (+ `_test.go`) | 2.7-5: our own drawing of the picture code (see below). |
+| `web/src/assets/logo.png`, `web/public/favicon.ico` | 2.7-6: Farooq Remote's own icon (the app's icon from the owner's branding files) as the logo and the browser-tab icon. |
 
 Upstream changes made by `apply-patches.py`: Arabic + Urdu in the language list; a browser language such as en-US,
 ur-PK or ar-QA opens its own language (upstream showed raw keys for en-US); `dir="rtl"` + `lang` on `<html>`; a missing
@@ -64,3 +65,12 @@ behind. It is drawn at 400×128 and shown at 200×64, so it stays sharp when the
 still chooses the digits (`capdString`: 2–9, 4 long); `captcha.go`'s string provider calls `FrDrawDigits`, so the admin
 login's picture code is the same. `go test -run TestFrDrawDigits ./utils/` checks size, dark digits and a light
 background before the build.
+
+## 2.7-6 — Farooq Remote's own logo (owner 1 Nov 2026)
+
+The owner sent his branding files «for icons and logos»: the account website still showed the RustDesk logo in the
+header, on the login, sign-up and forgot-password pages and as the browser-tab icon. `web/src/assets/logo.png` is now
+the app's own icon (the teal monitor with the amber arc — the same picture the app uses since September, made from
+`App-logo-icon.jpg` with its painted checkerboard keyed out) on a white rounded square, and `web/public/favicon.ico`
+the icon itself in 16/32/48/64 pixels. `index.html` and the store's default title say «Farooq Remote» instead of
+«Rustdesk API Admin». Everything of 2.7-5 stays.
