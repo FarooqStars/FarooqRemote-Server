@@ -76,5 +76,11 @@
   },
   "首页": {
     "One": "Home"
+  },
+  "Client": {
+    "One": "Client"
+  },
+  "PlatformUA": {
+    "One": "Platform / browser"
   }
 }

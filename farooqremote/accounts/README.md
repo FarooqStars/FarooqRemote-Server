@@ -7,8 +7,8 @@ stays untouched and the build fails if a patch no longer matches.
 
 | File | What |
 |---|---|
-| `apply-patches.py` | Run by the build after the checkouts. Exact, match-once replacements in 6 upstream files + copies the new files below. |
-| `web/src/utils/i18n/ur.json`, `ar.json` | The admin page in Urdu and Arabic (all 199 words). `en.add.json`: English words upstream lacks (added only where missing). |
+| `apply-patches.py` | Run by the build after the checkouts. Exact, match-once replacements in 8 upstream files + copies the new files below. |
+| `web/src/utils/i18n/ur.json`, `ar.json` | The admin page in Urdu and Arabic (all 201 words). `en.add.json`: English words upstream lacks (added only where missing). |
 | `web/src/utils/el-locale-ur.js`, `el-locale-ar.js` | element-plus 2.8.2 labels (tables, pages, dates, dialogs) in Urdu and Arabic. |
 | `web/src/styles/farooq.scss` | Right-to-left layout for Urdu / Arabic and the Naskh font **FS Urdu** (first in every language; used only for Arabic-script letters). |
 | `web/src/assets/fonts/` | FS Urdu = Noto Naskh Arabic woff2 400/700 (the same files as farooqstars.com) + `OFL-NotoNaskhArabic.txt` (SIL OFL 1.1). |
@@ -18,6 +18,6 @@ stays untouched and the build fails if a patch no longer matches.
 
 Upstream changes made by `apply-patches.py`: Arabic + Urdu in the language list; a browser language such as en-US,
 ur-PK or ar-QA opens its own language (upstream showed raw keys for en-US); `dir="rtl"` + `lang` on `<html>`; a missing
-word falls back to English; the welcome text per language; the language links under the login form.
+word falls back to English; the welcome text per language; the language links under the login form; the login-record column names translated.
 
 Owner's words (1 Nov 2026): «add Arabic & Urdu to this and even on remote client with URDU naskh fonts».

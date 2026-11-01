@@ -258,10 +258,11 @@ jobs:
             echo
             echo "Installed by FR-08-ACCOUNTS.bat (FA-020 Phase 5). Not a RustDesk server release."
           } > notes.md
+          # a rebuild of the same version replaces its release (before it is installed anywhere), so notes + target stay true
           if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
-            gh release upload "$RELEASE_TAG" "$ASSET" SHA256SUMS.txt "$SCREENS" --clobber --repo "$GITHUB_REPOSITORY"
-          else
-            gh release create "$RELEASE_TAG" "$ASSET" SHA256SUMS.txt "$SCREENS" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
-              --title "Farooq Remote accounts $API_VERSION (linux-arm64)" --notes-file notes.md --prerelease
+            gh release delete "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag
+            sleep 5
           fi
+          gh release create "$RELEASE_TAG" "$ASSET" SHA256SUMS.txt "$SCREENS" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Farooq Remote accounts ${RELEASE_TAG#accounts-} (linux-arm64)" --notes-file notes.md --prerelease
           echo "release: https://github.com/$GITHUB_REPOSITORY/releases/tag/$RELEASE_TAG"

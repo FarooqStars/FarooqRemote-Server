@@ -53,7 +53,9 @@ body {
 
   a.on {
     font-weight: 700;
-    color: var(--el-text-color-primary);
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
 }
 
@@ -170,9 +172,32 @@ html[dir='rtl'] {
     margin-right: 6px;
   }
 
-  // tables read from the right
+  // tables read from the right; words are not broken letter by letter (that breaks Urdu / Arabic joining)
   .el-table .el-table__cell {
     text-align: right;
+  }
+
+  .el-table .cell {
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  // the fixed «actions» column: upstream pins it to the right edge; in right-to-left it is the last (left) column,
+  // so pin it to the left edge instead - the buttons stay in view while the other columns scroll
+  .el-table .el-table-fixed-column--right {
+    left: 0 !important;
+    right: auto !important;
+  }
+
+  .el-table .el-table-fixed-column--left {
+    right: 0 !important;
+    left: auto !important;
+  }
+
+  // search forms above the tables: a label stays on one line
+  .list-query .el-form-item__label {
+    width: auto !important;
+    white-space: nowrap;
   }
 
   // pagination: spacing on the other side, the arrows point the reading way

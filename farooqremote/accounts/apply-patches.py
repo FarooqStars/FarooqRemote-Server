@@ -72,8 +72,8 @@ replace_once(p, "import zhTw from 'element-plus/es/locale/lang/zh-tw'\n",
              "import urEl from '@/utils/el-locale-ur'\n")
 replace_once(p, "  'zh-TW': { name: '中文繁体', value: zhTw, sideBarWidth: '210px' },\n",
              "  'zh-TW': { name: '中文繁体', value: zhTw, sideBarWidth: '210px' },\n"
-             "  'ar': { name: 'العربية', value: arEl, sideBarWidth: '240px' },\n"
-             "  'ur': { name: 'اردو', value: urEl, sideBarWidth: '240px' },\n")
+             "  'ar': { name: 'العربية', value: arEl, sideBarWidth: '280px' },\n"
+             "  'ur': { name: 'اردو', value: urEl, sideBarWidth: '280px' },\n")
 replace_once(p, "const defaultLang = localStorage.getItem('lang') || navigator.language || 'zh-CN'\n",
              "// Farooq Remote: a browser language like en-US, ur-PK or ar-QA opens its own language (upstream showed raw keys)\n"
              "const pickLang = (l) => {\n"
@@ -122,5 +122,14 @@ replace_once(p, "      <div class=\"oidc-options\">\n",
 replace_once(p, "  import { useUserStore } from '@/store/user'\n",
              "  import { useUserStore } from '@/store/user'\n  import { useAppStore } from '@/store/app'\n")
 replace_once(p, "  const userStore = useUserStore()\n", "  const userStore = useUserStore()\n  const appStore = useAppStore()\n")
+
+# 6. the login records: their column names were fixed English words
+for rel in ('src/views/my/login_log/index.vue', 'src/views/login/log.vue'):
+    p = os.path.join(WEB, rel)
+    replace_once(p, '<el-table-column prop="client" label="client"', '<el-table-column prop="client" :label="T(\'Client\')"')
+    replace_once(p, '<el-table-column prop="uuid" label="uuid"', '<el-table-column prop="uuid" :label="T(\'Uuid\')"')
+    replace_once(p, '<el-table-column prop="ip" label="ip"', '<el-table-column prop="ip" :label="T(\'Ip\')"')
+    replace_once(p, '<el-table-column prop="type" label="type"', '<el-table-column prop="type" :label="T(\'Type\')"')
+    replace_once(p, '<el-table-column prop="platform" label="Platform/UA"', '<el-table-column prop="platform" :label="T(\'PlatformUA\')"')
 
 print('== done')
