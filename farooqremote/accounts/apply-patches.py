@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-"""Farooq Remote (FA-020) - Urdu + Arabic for the account server's admin page (owner 1 Nov 2026:
-"add Arabic & Urdu to this ... with URDU naskh fonts").
+"""Farooq Remote (FA-020) - the account server's Farooq changes (owner 1 Nov 2026):
+- Urdu + Arabic for the admin page ("add Arabic & Urdu to this ... with URDU naskh fonts");
+- sign-up by anyone with an e-mail address + password, proved by an e-mail code, and "forgot password" by an e-mail
+  code (lib/frsignup + http/controller/admin/farooq_signup.go + the web pages register/index.vue, register/forgot.vue).
 
 Run by .github/workflows/farooq-accounts.yml after the pinned checkouts:
     python3 farooqremote/accounts/apply-patches.py <api checkout> <web checkout>
@@ -38,8 +40,9 @@ def copy_tree(src_rel, dst_root):
                 continue
             dst = os.path.join(dst_root, rel)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
+            existed = os.path.exists(dst)
             shutil.copyfile(src, dst)
-            print(f'  added   {os.path.relpath(dst)}')
+            print(f'  {"replaced" if existed else "added   "} {os.path.relpath(dst)}')
 
 
 print('== new files')
@@ -55,6 +58,16 @@ for k in added:
     en[k] = add[k]
 json.dump(en, open(en_path, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
 print(f'  en.json +{len(added)}: {", ".join(added)}')
+
+print('== server messages upstream lacks (English; Urdu + Arabic are in our own ur.toml / ar.toml)')
+toml_path = os.path.join(API, 'resources/i18n/en.toml')
+toml = open(toml_path, encoding='utf-8').read()
+add_toml = open(os.path.join(HERE, 'api-add/en.add.toml'), encoding='utf-8').read()
+for line in add_toml.splitlines():
+    if line.startswith('[') and line in toml.splitlines():
+        sys.exit(f'PATCH FAILED: en.toml already has {line}')
+open(toml_path, 'w', encoding='utf-8').write(toml.rstrip('\n') + '\n\n' + add_toml)
+print(f'  en.toml +{add_toml.count(chr(10) + "[") + 1} messages')
 
 print('== upstream files')
 # 1. the word lists: Arabic + Urdu, and a missing word falls back to English instead of showing its raw key
@@ -114,6 +127,10 @@ replace_once(p, "  const html = computed(_ => marked(appStore.setting.hello||'')
 # 5. the login page: the languages under the form (upstream has no way to change the language before logging in)
 p = os.path.join(WEB, 'src/views/login/login.vue')
 replace_once(p, "      <div class=\"oidc-options\">\n",
+             "      <div class=\"fr-links\" v-if=\"!disablePwd\">\n"
+             "        <a @click=\"router.push('/register')\">{{ T('FrCreateAccount') }}</a>\n"
+             "        <a @click=\"router.push('/forgot')\">{{ T('FrForgotPassword') }}</a>\n"
+             "      </div>\n\n"
              "      <div class=\"fr-langs\">\n"
              "        <a v-for=\"(v, k) in appStore.setting.langs\" :key=\"k\" :lang=\"k\" :class=\"{ on: appStore.setting.lang === k }\"\n"
              "           @click=\"appStore.changeLang(k)\">{{ v.name }}</a>\n"
@@ -122,6 +139,8 @@ replace_once(p, "      <div class=\"oidc-options\">\n",
 replace_once(p, "  import { useUserStore } from '@/store/user'\n",
              "  import { useUserStore } from '@/store/user'\n  import { useAppStore } from '@/store/app'\n")
 replace_once(p, "  const userStore = useUserStore()\n", "  const userStore = useUserStore()\n  const appStore = useAppStore()\n")
+replace_once(p, "        <el-form-item :label=\"T('Username')\">\n",
+             "        <el-form-item :label=\"T('FrEmailOrUsername')\">\n")
 
 # 6. the login records: their column names were fixed English words
 for rel in ('src/views/my/login_log/index.vue', 'src/views/login/log.vue'):
@@ -131,5 +150,52 @@ for rel in ('src/views/my/login_log/index.vue', 'src/views/login/log.vue'):
     replace_once(p, '<el-table-column prop="ip" label="ip"', '<el-table-column prop="ip" :label="T(\'Ip\')"')
     replace_once(p, '<el-table-column prop="type" label="type"', '<el-table-column prop="type" :label="T(\'Type\')"')
     replace_once(p, '<el-table-column prop="platform" label="Platform/UA"', '<el-table-column prop="platform" :label="T(\'PlatformUA\')"')
+
+# 7. sign-up + "forgot password" pages: the new route, open without logging in
+p = os.path.join(WEB, 'src/router/index.js')
+replace_once(p, "    component: () => import('@/views/register/index.vue'),\n  },\n",
+             "    component: () => import('@/views/register/index.vue'),\n  },\n"
+             "  {\n"
+             "    path: '/forgot',\n"
+             "    name: 'Forgot',\n"
+             "    meta: { title: 'FrForgotTitle' },\n"
+             "    component: () => import('@/views/register/forgot.vue'),\n"
+             "  },\n")
+p = os.path.join(WEB, 'src/permission.js')
+replace_once(p, "const whiteList = ['/login', '/register']\n", "const whiteList = ['/login', '/register', '/forgot']\n")
+
+# 8. server: the open routes of the sign-up (lib/frsignup + http/controller/admin/farooq_signup.go + http/router/farooq.go)
+p = os.path.join(API, 'http/router/admin.go')
+replace_once(p, "\tadg.POST(\"/user/register\", (&admin.User{}).Register)\n",
+             "\tadg.POST(\"/user/register\", (&admin.User{}).Register)\n"
+             "\t// Farooq Remote (FA-020): sign-up and \"forgot password\" by an e-mail code\n"
+             "\tFarooqSignupBind(adg)\n")
+
+# 9. server: an e-mail is the user name of a signed-up account - the app's login must accept up to 100 characters
+p = os.path.join(API, 'http/request/api/user.go')
+replace_once(p, 'Username   string            `json:"username" validate:"required,gte=2,lte=32" label:"用户名"`',
+             'Username   string            `json:"username" validate:"required,gte=2,lte=100" label:"用户名"`')
+
+# 10. server: sign-up stores the address in lower case - the login accepts it in any case
+p = os.path.join(API, 'service/user.go')
+replace_once(p, "\tu := &model.User{}\n\tDB.Where(\"username = ?\", username).First(u)\n\tif u.Id == 0 {\n\t\treturn u\n\t}\n\tok, newHash, err := utils.VerifyPassword(u.Password, password)\n",
+             "\tu := &model.User{}\n\tDB.Where(\"username = ?\", username).First(u)\n"
+             "\tif u.Id == 0 {\n"
+             "\t\t// Farooq Remote: accounts made by e-mail sign-up are stored in lower case; accept the address in any case\n"
+             "\t\tif lu := strings.ToLower(strings.TrimSpace(username)); lu != username {\n"
+             "\t\t\tDB.Where(\"username = ?\", lu).First(u)\n"
+             "\t\t}\n"
+             "\t}\n"
+             "\tif u.Id == 0 {\n\t\treturn u\n\t}\n\tok, newHash, err := utils.VerifyPassword(u.Password, password)\n")
+
+# 11. server: the app's login also stops a network address after too many wrong passwords (upstream only counted them)
+p = os.path.join(API, 'http/controller/api/login.go')
+replace_once(p, "\tloginLimiter := global.LoginLimiter\n\tclientIp := c.ClientIP()\n\n\tf := &api.LoginForm{}\n",
+             "\tloginLimiter := global.LoginLimiter\n\tclientIp := c.ClientIP()\n"
+             "\t// Farooq Remote: the same ban as the admin login (ban-threshold wrong passwords in 10 minutes -> 30 minutes)\n"
+             "\tif banned, _ := loginLimiter.CheckSecurityStatus(clientIp); banned {\n"
+             "\t\tresponse.Error(c, response.TranslateMsg(c, \"LoginBanned\"))\n"
+             "\t\treturn\n"
+             "\t}\n\n\tf := &api.LoginForm{}\n")
 
 print('== done')

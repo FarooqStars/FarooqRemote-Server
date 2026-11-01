@@ -82,5 +82,71 @@
   },
   "PlatformUA": {
     "One": "Platform / browser"
+  },
+  "FrCreateAccount": {
+    "One": "Create account"
+  },
+  "FrForgotPassword": {
+    "One": "Forgot password?"
+  },
+  "FrEmailOrUsername": {
+    "One": "E-mail or user name"
+  },
+  "FrEmail": {
+    "One": "E-mail"
+  },
+  "FrSendCode": {
+    "One": "Send the code"
+  },
+  "FrCode": {
+    "One": "Code from the e-mail (6 digits)"
+  },
+  "FrNewPassword": {
+    "One": "New password"
+  },
+  "FrPasswordHint": {
+    "One": "8 to 32 characters"
+  },
+  "FrSignupTitle": {
+    "One": "Create your Farooq Remote account"
+  },
+  "FrSignupIntro": {
+    "One": "Your e-mail is your user name. We send a code to it to make sure it is yours."
+  },
+  "FrForgotTitle": {
+    "One": "Set a new password"
+  },
+  "FrForgotIntro": {
+    "One": "Type the e-mail of your account. We send a code to it."
+  },
+  "FrCodeSentTo": {
+    "One": "The code was sent to:"
+  },
+  "FrSavePassword": {
+    "One": "Save the new password"
+  },
+  "FrSendAgain": {
+    "One": "Send a new code"
+  },
+  "FrBackToLogin": {
+    "One": "Back to login"
+  },
+  "FrNotOpen": {
+    "One": "Sign-up by e-mail is not open yet. Please try again later."
+  },
+  "FrPasswordSaved": {
+    "One": "Your new password is saved. Please log in."
+  },
+  "FrWelcome": {
+    "One": "Your account is ready."
+  },
+  "FrTermsNote": {
+    "One": "By creating an account you accept the terms of use."
+  },
+  "FrTermsLink": {
+    "One": "Terms of use"
+  },
+  "FrPrivacyLink": {
+    "One": "Privacy"
   }
 }

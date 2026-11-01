@@ -167,3 +167,63 @@ other = "محاولات خاطئة كثيرة — تم حظر هذا العنو�
 description = "Register success, wait admin confirm."
 one = "تم التسجيل، بانتظار موافقة المشرف."
 other = "تم التسجيل، بانتظار موافقة المشرف."
+
+[FrMailNotReady]
+description = "Sign-up by e-mail is not open yet. Please try again later."
+one = "التسجيل بالبريد الإلكتروني غير متاح بعد. يرجى المحاولة لاحقًا."
+other = "التسجيل بالبريد الإلكتروني غير متاح بعد. يرجى المحاولة لاحقًا."
+
+[FrEmailInvalid]
+description = "Please type a valid e-mail address."
+one = "يرجى كتابة بريد إلكتروني صحيح."
+other = "يرجى كتابة بريد إلكتروني صحيح."
+
+[FrTooMany]
+description = "Too many requests. Please wait a few minutes and try again."
+one = "طلبات كثيرة جدًا. يرجى الانتظار بضع دقائق ثم المحاولة مرة أخرى."
+other = "طلبات كثيرة جدًا. يرجى الانتظار بضع دقائق ثم المحاولة مرة أخرى."
+
+[FrCodeSent]
+description = "We sent a 6-digit code to your e-mail. Please look in your inbox (and the spam folder)."
+one = "أرسلنا رمزًا من 6 أرقام إلى بريدك الإلكتروني. يرجى مراجعة صندوق الوارد (ومجلد الرسائل غير المرغوب فيها)."
+other = "أرسلنا رمزًا من 6 أرقام إلى بريدك الإلكتروني. يرجى مراجعة صندوق الوارد (ومجلد الرسائل غير المرغوب فيها)."
+
+[FrCodeSentIfAccount]
+description = "If an account uses this e-mail, a 6-digit code is on its way. Please look in your inbox (and the spam folder)."
+one = "إذا كان هناك حساب بهذا البريد فقد أُرسل رمز من 6 أرقام. يرجى مراجعة صندوق الوارد (ومجلد الرسائل غير المرغوب فيها)."
+other = "إذا كان هناك حساب بهذا البريد فقد أُرسل رمز من 6 أرقام. يرجى مراجعة صندوق الوارد (ومجلد الرسائل غير المرغوب فيها)."
+
+[FrMailFailed]
+description = "The e-mail could not be sent. Please try again later."
+one = "تعذّر إرسال البريد. يرجى المحاولة لاحقًا."
+other = "تعذّر إرسال البريد. يرجى المحاولة لاحقًا."
+
+[FrCodeWrong]
+description = "The code is wrong or has expired. Please ask for a new code."
+one = "الرمز غير صحيح أو انتهت صلاحيته. يرجى طلب رمز جديد."
+other = "الرمز غير صحيح أو انتهت صلاحيته. يرجى طلب رمز جديد."
+
+[FrPasswordRule]
+description = "The password must be 8 to 32 characters long."
+one = "يجب أن تتكون كلمة المرور من 8 إلى 32 حرفًا."
+other = "يجب أن تتكون كلمة المرور من 8 إلى 32 حرفًا."
+
+[FrEmailTaken]
+description = "This e-mail already has an account. Please log in, or use «Forgot password»."
+one = "يوجد حساب بهذا البريد بالفعل. سجّل الدخول، أو استخدم «نسيت كلمة المرور»."
+other = "يوجد حساب بهذا البريد بالفعل. سجّل الدخول، أو استخدم «نسيت كلمة المرور»."
+
+[FrPasswordChanged]
+description = "Your new password is saved. Please log in with it."
+one = "تم حفظ كلمة المرور الجديدة. سجّل الدخول بها الآن."
+other = "تم حفظ كلمة المرور الجديدة. سجّل الدخول بها الآن."
+
+[LoginBanned]
+description = "Too many wrong tries from your network. Please try again in 30 minutes."
+one = "محاولات خاطئة كثيرة من شبكتك. يرجى المحاولة بعد 30 دقيقة."
+other = "محاولات خاطئة كثيرة من شبكتك. يرجى المحاولة بعد 30 دقيقة."
+
+[UserDisabled]
+description = "This account is switched off. Please write to the administrator."
+one = "هذا الحساب معطّل. يرجى مراسلة المسؤول."
+other = "هذا الحساب معطّل. يرجى مراسلة المسؤول."

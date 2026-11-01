@@ -1,0 +1,59 @@
+[FrMailNotReady]
+description = "Sign-up by e-mail is not open yet. Please try again later."
+one = "Sign-up by e-mail is not open yet. Please try again later."
+other = "Sign-up by e-mail is not open yet. Please try again later."
+
+[FrEmailInvalid]
+description = "Please type a valid e-mail address."
+one = "Please type a valid e-mail address."
+other = "Please type a valid e-mail address."
+
+[FrTooMany]
+description = "Too many requests. Please wait a few minutes and try again."
+one = "Too many requests. Please wait a few minutes and try again."
+other = "Too many requests. Please wait a few minutes and try again."
+
+[FrCodeSent]
+description = "We sent a 6-digit code to your e-mail. Please look in your inbox (and the spam folder)."
+one = "We sent a 6-digit code to your e-mail. Please look in your inbox (and the spam folder)."
+other = "We sent a 6-digit code to your e-mail. Please look in your inbox (and the spam folder)."
+
+[FrCodeSentIfAccount]
+description = "If an account uses this e-mail, a 6-digit code is on its way. Please look in your inbox (and the spam folder)."
+one = "If an account uses this e-mail, a 6-digit code is on its way. Please look in your inbox (and the spam folder)."
+other = "If an account uses this e-mail, a 6-digit code is on its way. Please look in your inbox (and the spam folder)."
+
+[FrMailFailed]
+description = "The e-mail could not be sent. Please try again later."
+one = "The e-mail could not be sent. Please try again later."
+other = "The e-mail could not be sent. Please try again later."
+
+[FrCodeWrong]
+description = "The code is wrong or has expired. Please ask for a new code."
+one = "The code is wrong or has expired. Please ask for a new code."
+other = "The code is wrong or has expired. Please ask for a new code."
+
+[FrPasswordRule]
+description = "The password must be 8 to 32 characters long."
+one = "The password must be 8 to 32 characters long."
+other = "The password must be 8 to 32 characters long."
+
+[FrEmailTaken]
+description = "This e-mail already has an account. Please log in, or use «Forgot password»."
+one = "This e-mail already has an account. Please log in, or use «Forgot password»."
+other = "This e-mail already has an account. Please log in, or use «Forgot password»."
+
+[FrPasswordChanged]
+description = "Your new password is saved. Please log in with it."
+one = "Your new password is saved. Please log in with it."
+other = "Your new password is saved. Please log in with it."
+
+[LoginBanned]
+description = "Too many wrong tries from your network. Please try again in 30 minutes."
+one = "Too many wrong tries from your network. Please try again in 30 minutes."
+other = "Too many wrong tries from your network. Please try again in 30 minutes."
+
+[UserDisabled]
+description = "This account is switched off. Please write to the administrator."
+one = "This account is switched off. Please write to the administrator."
+other = "This account is switched off. Please write to the administrator."

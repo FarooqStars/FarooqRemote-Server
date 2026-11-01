@@ -7,7 +7,7 @@ stays untouched and the build fails if a patch no longer matches.
 
 | File | What |
 |---|---|
-| `apply-patches.py` | Run by the build after the checkouts. Exact, match-once replacements in 8 upstream files + copies the new files below. |
+| `apply-patches.py` | Run by the build after the checkouts. Exact, match-once replacements in 13 upstream files, English words appended to `en.json` / `en.toml`, and the new files below copied in (the upstream `views/register/index.vue` is replaced). |
 | `web/src/utils/i18n/ur.json`, `ar.json` | The admin page in Urdu and Arabic (all 201 words). `en.add.json`: English words upstream lacks (added only where missing). |
 | `web/src/utils/el-locale-ur.js`, `el-locale-ar.js` | element-plus 2.8.2 labels (tables, pages, dates, dialogs) in Urdu and Arabic. |
 | `web/src/styles/farooq.scss` | Right-to-left layout for Urdu / Arabic and the Naskh font **FS Urdu** (first in every language; used only for Arabic-script letters). |
@@ -15,9 +15,31 @@ stays untouched and the build fails if a patch no longer matches.
 | `api/resources/i18n/ur.toml`, `ar.toml` | The server's own messages (wrong password, banned, …) in Urdu and Arabic. |
 | `hello.html` | The welcome text on «My info», one block per language (`<!--lang:en-->` / `ur` / `ar`); packaged as `conf/admin/hello.html`. |
 | `ci/screens.mjs`, `ci/demo.sql` | The build's pictures of the admin page in English, Urdu and Arabic with demo devices (release asset `…-screens.zip`). |
+| `api/lib/frsignup/` | 2.7-3: sign-up and «forgot password» by a 6-digit e-mail code — codes (15 minutes, 5 tries, once), limits (3 mails per address per 15 minutes, 10 a day, 20 per network address an hour), the mails in English / Urdu / Arabic, SMTP (Go standard library only; unit test `frsignup_test.go`). |
+| `api/http/controller/admin/farooq_signup.go`, `api/http/router/farooq.go` | 2.7-3: the open routes `/api/admin/fr/…` (options, captcha, signup/code, signup/finish, password/code, password/reset). The administrator's account is never reset by e-mail. |
+| `web/src/views/register/index.vue`, `forgot.vue`, `web/src/api/farooq.js` | 2.7-3: the sign-up page (e-mail + picture code → code + password) and the forgot-password page; links on the login page. |
+| `api-add/en.add.toml` | 2.7-3: English server messages upstream lacks (sign-up, `LoginBanned`, `UserDisabled`), appended to `en.toml`. |
+| `ci/signup_test.py` | 2.7-3: the build runs the whole sign-up / forgot-password flow with mails written to files. |
 
 Upstream changes made by `apply-patches.py`: Arabic + Urdu in the language list; a browser language such as en-US,
 ur-PK or ar-QA opens its own language (upstream showed raw keys for en-US); `dir="rtl"` + `lang` on `<html>`; a missing
 word falls back to English; the welcome text per language; the language links under the login form; the login-record column names translated.
 
 Owner's words (1 Nov 2026): «add Arabic & Urdu to this and even on remote client with URDU naskh fonts».
+
+## 2.7-3 — sign-up by e-mail code (owner 1 Nov 2026)
+
+«make system from app user can Register this App by Email id and password» — his choices: the account works at once
+after the e-mail code; «forgot password» by e-mail in the first release. The e-mail address is the user name (stored
+in lower case); a second sign-up for the same address makes no second account — its owner gets a mail instead.
+New users join the default group (they see only their own devices; the administrator sees all).
+
+Upstream changes for it: the `/forgot` route (open without login), the two links and «E-mail or user name» on the
+login page, the open `/api/admin/fr/…` routes, the app's login accepts up to 100 letters and any case, and the app's
+login now stops a network address after `ban-threshold` wrong passwords (upstream only counted them).
+
+Mail settings come from the server's environment (systemd `EnvironmentFile`, written by FR-11 on the VM — the mailbox
+password is typed there by the owner and is never stored in this repository):
+`FR_SMTP_HOST`, `FR_SMTP_PORT` (465 TLS / 587 STARTTLS), `FR_SMTP_USER`, `FR_SMTP_PASS`, `FR_MAIL_FROM`,
+`FR_MAIL_FROM_NAME`, `FR_SITE`. Without them sign-up stays closed and the pages say so. `FR_MAIL_TEST_DIR` is for the
+build's test only.

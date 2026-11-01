@@ -1,8 +1,8 @@
 // Farooq Remote (FA-020): pictures of the admin page in English, Urdu and Arabic - the build's own check of the
 // right-to-left layout, and the pictures for the help pages. Uses the demo data from ci/demo.sql.
-// env: BASE (http://127.0.0.1:21114/_admin/), FR_USER, FR_PASS, OUT (folder)
+// env: BASE (http://127.0.0.1:21114/_admin/), FR_USER, FR_PASS, OUT (folder), MAILS (the server's FR_MAIL_TEST_DIR)
 import { chromium } from 'playwright'
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, writeFileSync, readFileSync } from 'node:fs'
 
 const base = process.env.BASE || 'http://127.0.0.1:21114/_admin/'
 const out = process.env.OUT || 'screens'
@@ -33,6 +33,34 @@ for (const lang of ['en', 'ur', 'ar']) {
   await page.screenshot({ path: `${out}/${lang}-00-login.png` })
   const dir = await page.evaluate(() => [document.documentElement.dir, document.documentElement.lang].join('/'))
   notes.push(`[${lang}] html dir/lang = ${dir}`)
+  // sign-up by e-mail code (FA-020): the first step of both pages, then the second step of the sign-up
+  let capId = ''
+  page.on('response', async (r) => {
+    if (r.url().includes('/fr/captcha')) { try { capId = (await r.json()).data.captcha.id } catch (e) {} }
+  })
+  await page.goto(base + '#/forgot')
+  await settle(page)
+  await page.screenshot({ path: `${out}/${lang}-12-forgot.png` })
+  await page.goto(base + '#/register')
+  await settle(page)
+  await page.screenshot({ path: `${out}/${lang}-11-signup.png` })
+  if (process.env.MAILS && capId) {
+    const answer = readFileSync(`${process.env.MAILS}/captcha-${capId}.txt`, 'utf8').trim()
+    const inputs = page.locator('.login-form input')
+    await inputs.nth(0).fill(`${lang}-reader@example.com`)
+    await inputs.nth(1).fill(answer)
+    await page.locator('.login-button').first().click()
+    await page.waitForTimeout(1500)
+    await page.locator('.login-form input').nth(1).fill('Example-pass-1')
+    await page.locator('.login-form input').nth(2).fill('Example-pass-1')
+    await page.mouse.move(5, 5)
+    await page.waitForTimeout(500)
+    await page.screenshot({ path: `${out}/${lang}-13-signup-code.png` })
+  } else {
+    notes.push(`[${lang}] no second sign-up picture (MAILS=${process.env.MAILS || ''}, captcha=${capId})`)
+  }
+  await page.goto(base + '#/login')
+  await settle(page)
   await page.locator('.login-form input').first().fill(process.env.FR_USER)
   await page.locator('.login-form input[type=password]').fill(process.env.FR_PASS)
   await page.locator('.login-button').first().click()

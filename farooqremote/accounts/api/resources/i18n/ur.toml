@@ -167,3 +167,63 @@ other = "بہت زیادہ غلط کوششیں — یہ پتہ کچھ دیر ک�
 description = "Register success, wait admin confirm."
 one = "اکاؤنٹ بن گیا، ایڈمن کی منظوری کا انتظار کریں۔"
 other = "اکاؤنٹ بن گیا، ایڈمن کی منظوری کا انتظار کریں۔"
+
+[FrMailNotReady]
+description = "Sign-up by e-mail is not open yet. Please try again later."
+one = "ای میل سے سائن اپ ابھی کھلا نہیں۔ براہ کرم کچھ دیر بعد کوشش کریں۔"
+other = "ای میل سے سائن اپ ابھی کھلا نہیں۔ براہ کرم کچھ دیر بعد کوشش کریں۔"
+
+[FrEmailInvalid]
+description = "Please type a valid e-mail address."
+one = "براہ کرم درست ای میل لکھیں۔"
+other = "براہ کرم درست ای میل لکھیں۔"
+
+[FrTooMany]
+description = "Too many requests. Please wait a few minutes and try again."
+one = "بہت زیادہ کوششیں۔ براہ کرم چند منٹ بعد دوبارہ کوشش کریں۔"
+other = "بہت زیادہ کوششیں۔ براہ کرم چند منٹ بعد دوبارہ کوشش کریں۔"
+
+[FrCodeSent]
+description = "We sent a 6-digit code to your e-mail. Please look in your inbox (and the spam folder)."
+one = "ہم نے آپ کی ای میل پر 6 ہندسوں کا کوڈ بھیج دیا ہے۔ ان باکس (اور اسپیم فولڈر) دیکھیں۔"
+other = "ہم نے آپ کی ای میل پر 6 ہندسوں کا کوڈ بھیج دیا ہے۔ ان باکس (اور اسپیم فولڈر) دیکھیں۔"
+
+[FrCodeSentIfAccount]
+description = "If an account uses this e-mail, a 6-digit code is on its way. Please look in your inbox (and the spam folder)."
+one = "اگر اس ای میل کا اکاؤنٹ ہے تو 6 ہندسوں کا کوڈ بھیج دیا گیا ہے۔ ان باکس (اور اسپیم فولڈر) دیکھیں۔"
+other = "اگر اس ای میل کا اکاؤنٹ ہے تو 6 ہندسوں کا کوڈ بھیج دیا گیا ہے۔ ان باکس (اور اسپیم فولڈر) دیکھیں۔"
+
+[FrMailFailed]
+description = "The e-mail could not be sent. Please try again later."
+one = "ای میل نہیں جا سکی۔ براہ کرم کچھ دیر بعد کوشش کریں۔"
+other = "ای میل نہیں جا سکی۔ براہ کرم کچھ دیر بعد کوشش کریں۔"
+
+[FrCodeWrong]
+description = "The code is wrong or has expired. Please ask for a new code."
+one = "کوڈ غلط ہے یا اس کا وقت ختم ہو گیا۔ نیا کوڈ منگوائیں۔"
+other = "کوڈ غلط ہے یا اس کا وقت ختم ہو گیا۔ نیا کوڈ منگوائیں۔"
+
+[FrPasswordRule]
+description = "The password must be 8 to 32 characters long."
+one = "پاس ورڈ 8 سے 32 حروف کا ہو۔"
+other = "پاس ورڈ 8 سے 32 حروف کا ہو۔"
+
+[FrEmailTaken]
+description = "This e-mail already has an account. Please log in, or use «Forgot password»."
+one = "اس ای میل کا اکاؤنٹ پہلے سے موجود ہے۔ لاگ ان کریں، یا «پاس ورڈ بھول گئے» استعمال کریں۔"
+other = "اس ای میل کا اکاؤنٹ پہلے سے موجود ہے۔ لاگ ان کریں، یا «پاس ورڈ بھول گئے» استعمال کریں۔"
+
+[FrPasswordChanged]
+description = "Your new password is saved. Please log in with it."
+one = "آپ کا نیا پاس ورڈ محفوظ ہو گیا۔ اب اسی سے لاگ ان کریں۔"
+other = "آپ کا نیا پاس ورڈ محفوظ ہو گیا۔ اب اسی سے لاگ ان کریں۔"
+
+[LoginBanned]
+description = "Too many wrong tries from your network. Please try again in 30 minutes."
+one = "آپ کے نیٹ ورک سے بہت زیادہ غلط کوششیں ہوئیں۔ براہ کرم 30 منٹ بعد کوشش کریں۔"
+other = "آپ کے نیٹ ورک سے بہت زیادہ غلط کوششیں ہوئیں۔ براہ کرم 30 منٹ بعد کوشش کریں۔"
+
+[UserDisabled]
+description = "This account is switched off. Please write to the administrator."
+one = "یہ اکاؤنٹ بند ہے۔ براہ کرم ایڈمن سے رابطہ کریں۔"
+other = "یہ اکاؤنٹ بند ہے۔ براہ کرم ایڈمن سے رابطہ کریں۔"

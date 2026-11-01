@@ -59,6 +59,26 @@ body {
   }
 }
 
+// "Create account" and "Forgot password?" under the login form (FA-020, sign-up by e-mail code)
+.fr-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin: -6px 0 6px;
+  font-size: 14px;
+
+  a {
+    cursor: pointer;
+    color: #8fd3ff;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
 html[dir='rtl'] {
   // header: menu button, logo + title on the right, the settings on the left
   .ex-icon {
