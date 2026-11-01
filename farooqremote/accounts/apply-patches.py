@@ -213,4 +213,56 @@ replace_once(p, 'func (p B64StringCaptchaProvider) Draw(content string) (string,
 replace_once(os.path.join(WEB, 'index.html'), '<title>Rustdesk API Admin</title>', '<title>Farooq Remote</title>')
 replace_once(os.path.join(WEB, 'src/store/app.js'), "title: 'Rustdesk API Admin',", "title: 'Farooq Remote',")
 
+# 13. server: «easy access» like TeamViewer's (owner 1 Nov 2026; lib/freasy + http/controller/api/farooq_easy.go):
+#     the heartbeat carries «fr_easy» from a computer that has it on (recorded only when the heartbeat's uuid is the stored
+#     one); /api/fr/easy/check is open (the computer's service has no token - the one-time ticket is the secret);
+#     /api/fr/easy/ticket needs the signed-in account.
+p = os.path.join(API, 'http/request/api/peer.go')
+replace_once(p, 'type PeerInfoInHeartbeat struct {\n'
+             '\tId   string `json:"id"`\n'
+             '\tUuid string `json:"uuid"`\n'
+             '\tVer  int    `json:"ver"`\n}\n',
+             'type PeerInfoInHeartbeat struct {\n'
+             '\tId     string `json:"id"`\n'
+             '\tUuid   string `json:"uuid"`\n'
+             '\tVer    int    `json:"ver"`\n'
+             '\tFrEasy bool   `json:"fr_easy"` // Farooq Remote: this computer has easy access on (lib/freasy)\n}\n')
+p = os.path.join(API, 'http/controller/api/index.go')
+replace_once(p, '\t"github.com/lejianwen/rustdesk-api/v2/http/response"\n',
+             '\t"github.com/lejianwen/rustdesk-api/v2/http/response"\n'
+             '\t"github.com/lejianwen/rustdesk-api/v2/lib/freasy"\n')
+replace_once(p, '\tpeer := service.AllService.PeerService.FindById(info.Id)\n'
+             '\tif peer == nil || peer.RowId == 0 {\n'
+             '\t\tc.JSON(http.StatusOK, gin.H{})\n'
+             '\t\treturn\n'
+             '\t}\n',
+             '\tpeer := service.AllService.PeerService.FindById(info.Id)\n'
+             '\tif peer == nil || peer.RowId == 0 {\n'
+             '\t\tc.JSON(http.StatusOK, gin.H{})\n'
+             '\t\treturn\n'
+             '\t}\n'
+             '\t// Farooq Remote: easy access as said by the computer itself (lib/freasy) - only with its own stored uuid\n'
+             '\tif peer.Uuid == info.Uuid {\n'
+             '\t\tfreasy.Default.Announce(info.Id, info.FrEasy, time.Now())\n'
+             '\t}\n')
+p = os.path.join(API, 'http/router/api.go')
+replace_once(p, '\t\tfrg.POST("/sysinfo", pe.SysInfo)\n'
+             '\t\tfrg.POST("/sysinfo_ver", pe.SysInfoVer)\n'
+             '\t}\n',
+             '\t\tfrg.POST("/sysinfo", pe.SysInfo)\n'
+             '\t\tfrg.POST("/sysinfo_ver", pe.SysInfoVer)\n'
+             '\t}\n'
+             '\t{\n'
+             '\t\t// Farooq Remote: easy access - the computer being connected to checks a ticket (lib/freasy)\n'
+             '\t\tfe := &api.FarooqEasy{}\n'
+             '\t\tfrg.POST("/fr/easy/check", fe.Check)\n'
+             '\t}\n')
+replace_once(p, '\tfrg.Use(middleware.RustAuth())\n',
+             '\tfrg.Use(middleware.RustAuth())\n'
+             '\t{\n'
+             '\t\t// Farooq Remote: easy access - a signed-in computer asks a ticket (lib/freasy)\n'
+             '\t\tfe := &api.FarooqEasy{}\n'
+             '\t\tfrg.POST("/fr/easy/ticket", fe.Ticket)\n'
+             '\t}\n')
+
 print('== done')

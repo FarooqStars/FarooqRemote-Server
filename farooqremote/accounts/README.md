@@ -23,6 +23,7 @@ stays untouched and the build fails if a patch no longer matches.
 | `api/utils/farooq_captcha.go` (+ `_test.go`) | 2.7-5: our own drawing of the picture code (see below). |
 | `web/src/assets/logo.png`, `web/public/favicon.ico` | 2.7-6: Farooq Remote's own icon (the app's icon from the owner's branding files) as the logo and the browser-tab icon. |
 | `web/public/company-logo.webp`, `hello.html`, `api/lib/frsignup/mail-icon.png` | 2.7-7/2.7-8: the company logo in the welcome box; the app icon inside the sign-up / password mails. |
+| `api/lib/freasy/`, `api/http/controller/api/farooq_easy.go`, `ci/easy_test.py` | 2.7-9: «easy access» — one-time tickets so the owner's own computers connect without the remote password (see below). |
 
 Upstream changes made by `apply-patches.py`: Arabic + Urdu in the language list; a browser language such as en-US,
 ur-PK or ar-QA opens its own language (upstream showed raw keys for en-US); `dir="rtl"` + `lang` on `<html>`; a missing
@@ -92,3 +93,22 @@ before «Farooq Remote», so it shows even where a mail program blocks pictures 
 edges of the owner's picture, which the image library fills with black. The plate is now made on a white canvas and saved
 as `web/public/company-logo.webp` (WebP with real transparency, 8 KB — the same file as on the farooqmughal.net pages);
 `hello.html` points to it. 2.7-7 was built but never installed.
+
+## 2.7-9 — easy access, like TeamViewer's (owner 1 Nov 2026)
+
+«if i already use app login password for both side all the devices which visible under that account it should not ask
+password there should extra option in password windows for this feature». TeamViewer calls this «Easy Access»: the
+device is assigned to the account and «Grant easy access» is ticked once on each device; then the account connects
+without a password, everybody else still needs one.
+
+- The computer to be reached (app 1.1.5+, its owner ticked «Easy access» while signed in) keeps the account name in its
+  own settings and says `fr_easy: true` in its heartbeat (recorded only when the heartbeat's uuid is the stored one).
+- `POST /api/fr/easy/ticket` (signed in) `{"id": target, "from": my id}`: a ticket only for a computer that said so in
+  the last 3 minutes and is not bound to another account; 32 random bytes, 60 seconds, one use; at most 60 per account
+  per 10 minutes.
+- `POST /api/fr/easy/check` (no sign-in — the computer's service has no token; the ticket is the secret)
+  `{"ticket", "id": my id}`: answers once, with the account and the asking computer, only for that target and in time.
+- The computer accepts only its stored account and the computer that connected; anything else → the password, as before.
+  So a stranger needs the owner's signed-in account (as with TeamViewer — a strong account password matters).
+- Tested by `lib/freasy/freasy_test.go` and `ci/easy_test.py` (signed-in only, uuid check, one use, other computer,
+  other account, switched off, rubbish).
