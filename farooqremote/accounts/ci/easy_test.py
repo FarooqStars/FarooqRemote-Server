@@ -9,6 +9,7 @@ test ends with this network address stopped by the limiter):
 import json
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 
@@ -62,7 +63,9 @@ def login(user, pw, dev):
 
 
 tok_a = login('admin', ADMIN_PW, A)
+time.sleep(1.2)   # the server's tokens (JWT) carry their time in whole seconds: two logins in one second get the same token
 tok_b = login('admin', ADMIN_PW, B)
+ok(tok_a != tok_b, 'each computer has its own login')
 tok_c = login(USER2, USER2_PW, C)
 
 
