@@ -53,7 +53,7 @@ body {
 
   a.on {
     font-weight: 700;
-    color: inherit;
+    color: #fff; // the login card is always dark
     text-decoration: underline;
     text-underline-offset: 4px;
   }
@@ -180,6 +180,10 @@ html[dir='rtl'] {
   .el-table .cell {
     word-break: normal;
     overflow-wrap: break-word;
+  }
+
+  .el-table th.el-table__cell .cell {
+    overflow-wrap: normal; // column names wrap only between words
   }
 
   // the fixed «actions» column: upstream pins it to the right edge; in right-to-left it is the last (left) column,
