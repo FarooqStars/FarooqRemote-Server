@@ -19,6 +19,7 @@ import (
 	"crypto/sha256"
 	"crypto/subtle"
 	"crypto/tls"
+	_ "embed"
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
@@ -36,6 +37,15 @@ import (
 	"time"
 	"unicode/utf8"
 )
+
+// mailIcon is Farooq Remote's icon (96 x 96 PNG), sent inside every mail and shown at the top (owner 1 Nov 2026:
+// his branding files «for icons and logos»). Inside the mail (cid:) it shows even where pictures from the web are blocked.
+//
+//go:embed mail-icon.png
+var mailIcon []byte
+
+// MailIconCID is the Content-ID of the icon inside the mail.
+const MailIconCID = "frlogo@farooqmughal.net"
 
 const (
 	CodeTTL      = 15 * time.Minute
@@ -276,7 +286,7 @@ func Mail(kind, lang, c string) (string, string, string) {
 	var b strings.Builder
 	fmt.Fprintf(&b, `<!doctype html><html><body style="margin:0;padding:24px;background:#f4f6f8">`)
 	fmt.Fprintf(&b, `<div dir="%s" style="max-width:520px;margin:0 auto;background:#fff;border-radius:10px;padding:28px;text-align:%s;font-family:'Noto Naskh Arabic','Segoe UI',Tahoma,Arial,sans-serif;font-size:16px;line-height:1.8;color:#1f2933">`, m.dir, align)
-	fmt.Fprintf(&b, `<div style="font-size:20px;font-weight:bold;color:#0e7490" dir="ltr">Farooq Remote</div>`)
+	fmt.Fprintf(&b, `<div style="font-size:20px;font-weight:bold;color:#0e7490;line-height:40px" dir="ltr"><img src="cid:%s" width="40" height="40" alt="" style="vertical-align:middle;border:0;margin-right:10px">Farooq Remote</div>`, MailIconCID)
 	fmt.Fprintf(&b, `<p>%s</p>`, html.EscapeString(m.intro))
 	if c != "" {
 		fmt.Fprintf(&b, `<div dir="ltr" style="font-size:34px;font-weight:bold;letter-spacing:8px;text-align:center;padding:14px;margin:18px 0;background:#ecfeff;border-radius:8px;color:#0e7490">%s</div>`, html.EscapeString(c))
@@ -305,9 +315,11 @@ func wrap76(s string) string {
 	return b.String()
 }
 
-// Message builds the MIME message (text + HTML, UTF-8, base64).
+// Message builds the MIME message (text + HTML, UTF-8, base64): multipart/alternative of the plain text and a
+// multipart/related part that holds the HTML and the icon it shows (cid:MailIconCID).
 func Message(fromName, from, to, subject, text, htmlBody string, now time.Time) []byte {
 	boundary := "fr-" + randHex(12)
+	related := "fr-rel-" + randHex(12)
 	domain := "farooqmughal.net"
 	if i := strings.LastIndex(from, "@"); i >= 0 {
 		domain = from[i+1:]
@@ -321,12 +333,23 @@ func Message(fromName, from, to, subject, text, htmlBody string, now time.Time) 
 	b.WriteString("Auto-Submitted: auto-generated\r\n")
 	b.WriteString("MIME-Version: 1.0\r\n")
 	b.WriteString("Content-Type: multipart/alternative; boundary=\"" + boundary + "\"\r\n\r\n")
-	for _, p := range [][2]string{{"text/plain", text}, {"text/html", htmlBody}} {
-		b.WriteString("--" + boundary + "\r\n")
-		b.WriteString("Content-Type: " + p[0] + "; charset=UTF-8\r\n")
-		b.WriteString("Content-Transfer-Encoding: base64\r\n\r\n")
-		b.WriteString(wrap76(base64.StdEncoding.EncodeToString([]byte(p[1]))))
-	}
+	b.WriteString("--" + boundary + "\r\n")
+	b.WriteString("Content-Type: text/plain; charset=UTF-8\r\n")
+	b.WriteString("Content-Transfer-Encoding: base64\r\n\r\n")
+	b.WriteString(wrap76(base64.StdEncoding.EncodeToString([]byte(text))))
+	b.WriteString("--" + boundary + "\r\n")
+	b.WriteString("Content-Type: multipart/related; boundary=\"" + related + "\"\r\n\r\n")
+	b.WriteString("--" + related + "\r\n")
+	b.WriteString("Content-Type: text/html; charset=UTF-8\r\n")
+	b.WriteString("Content-Transfer-Encoding: base64\r\n\r\n")
+	b.WriteString(wrap76(base64.StdEncoding.EncodeToString([]byte(htmlBody))))
+	b.WriteString("--" + related + "\r\n")
+	b.WriteString("Content-Type: image/png; name=\"farooq-remote.png\"\r\n")
+	b.WriteString("Content-Transfer-Encoding: base64\r\n")
+	b.WriteString("Content-ID: <" + MailIconCID + ">\r\n")
+	b.WriteString("Content-Disposition: inline; filename=\"farooq-remote.png\"\r\n\r\n")
+	b.WriteString(wrap76(base64.StdEncoding.EncodeToString(mailIcon)))
+	b.WriteString("--" + related + "--\r\n")
 	b.WriteString("--" + boundary + "--\r\n")
 	return b.Bytes()
 }

@@ -20,6 +20,11 @@ const settle = async (page) => {
   await page.waitForLoadState('networkidle').catch(() => {})
   await page.waitForTimeout(900)
 }
+// a picture without the passing messages (e.g. «Login success», «We sent the code») over the page (2.7-7)
+const shot = async (page, name) => {
+  await page.evaluate(() => document.querySelectorAll('.el-message, .el-notification').forEach((e) => e.remove())).catch(() => {})
+  await page.screenshot({ path: `${out}/${name}.png` })
+}
 const browser = await chromium.launch()
 const notes = []
 for (const lang of ['en', 'ur', 'ar']) {
@@ -30,7 +35,7 @@ for (const lang of ['en', 'ur', 'ar']) {
   page.on('console', (m) => { if (m.type() === 'error') notes.push(`[${lang}] console: ${m.text()}`) })
   await page.goto(base + '#/login')
   await settle(page)
-  await page.screenshot({ path: `${out}/${lang}-00-login.png` })
+  await shot(page, `${lang}-00-login`)
   const dir = await page.evaluate(() => [document.documentElement.dir, document.documentElement.lang].join('/'))
   notes.push(`[${lang}] html dir/lang = ${dir}`)
   // sign-up by e-mail code (FA-020): the first step of both pages, then the second step of the sign-up
@@ -40,10 +45,10 @@ for (const lang of ['en', 'ur', 'ar']) {
   })
   await page.goto(base + '#/forgot')
   await settle(page)
-  await page.screenshot({ path: `${out}/${lang}-12-forgot.png` })
+  await shot(page, `${lang}-12-forgot`)
   await page.goto(base + '#/register')
   await settle(page)
-  await page.screenshot({ path: `${out}/${lang}-11-signup.png` })
+  await shot(page, `${lang}-11-signup`)
   if (process.env.MAILS && capId) {
     const answer = readFileSync(`${process.env.MAILS}/captcha-${capId}.txt`, 'utf8').trim()
     const inputs = page.locator('.login-form input')
@@ -55,7 +60,7 @@ for (const lang of ['en', 'ur', 'ar']) {
     await page.locator('.login-form input').nth(2).fill('Example-pass-1')
     await page.mouse.move(5, 5)
     await page.waitForTimeout(500)
-    await page.screenshot({ path: `${out}/${lang}-13-signup-code.png` })
+    await shot(page, `${lang}-13-signup-code`)
   } else {
     notes.push(`[${lang}] no second sign-up picture (MAILS=${process.env.MAILS || ''}, captcha=${capId})`)
   }
@@ -69,27 +74,27 @@ for (const lang of ['en', 'ur', 'ar']) {
   for (const [name, hash] of pages) {
     await page.goto(base + hash)
     await settle(page)
-    await page.screenshot({ path: `${out}/${lang}-${name}.png` })
+    await shot(page, `${lang}-${name}`)
   }
   // the language menu in the header
   await page.goto(base + '#/')
   await settle(page)
   await page.locator('.setting .el-dropdown').first().hover()
   await page.waitForTimeout(700)
-  await page.screenshot({ path: `${out}/${lang}-08-language-menu.png` })
+  await shot(page, `${lang}-08-language-menu`)
   await page.mouse.move(5, 5)
   await page.waitForTimeout(400)
   // the change-password window
   await page.locator('.info-form .el-button--danger').first().click()
   await page.waitForTimeout(800)
-  await page.screenshot({ path: `${out}/${lang}-09-change-password.png` })
+  await shot(page, `${lang}-09-change-password`)
   await page.keyboard.press('Escape')
   // the add window of the address book
   await page.goto(base + '#/my/address_book')
   await settle(page)
   await page.locator('.el-button--danger').first().click()
   await page.waitForTimeout(800)
-  await page.screenshot({ path: `${out}/${lang}-10-address-book-add.png` })
+  await shot(page, `${lang}-10-address-book-add`)
   await ctx.close()
 }
 await browser.close()

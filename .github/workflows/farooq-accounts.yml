@@ -18,6 +18,8 @@ name: Farooq Remote - account server (linux-arm64)
 # a faint line behind; drawn at 400x128 and shown at 200x64 (2.7-4 still had random sizes, pale colours and a wave band).
 # 2.7-6: Farooq Remote's own icon as the account website's logo and browser-tab icon (upstream: the RustDesk logo), and the
 # tab title «Farooq Remote» from the first moment.
+# 2.7-7: the company logo in the welcome box (web/public/company-logo.png + hello.html), the app icon at the top of the
+# sign-up / password mails (inside the mail, cid:), and the build pictures without passing message boxes.
 #
 # Runs when this file or farooqremote/accounts/ is pushed to farooq/develop (or from the Actions tab). master stays the
 # upstream mirror. No secrets are used - only this run's own GITHUB_TOKEN, to publish the release.
@@ -39,9 +41,9 @@ env:
   WEB_COMMIT: 3998c2a9213fcd047252776d0f0db33e6717026c   # master when v2.7 was released (31 Aug 2025)
   GO_VERSION: "1.23.10"                                    # the toolchain line of rustdesk-api go.mod
   NODE_VERSION: "20"                                       # as upstream build.yml
-  RELEASE_TAG: accounts-2.7-6
-  ASSET: farooqremote-accounts-2.7-6-linux-arm64.tar.gz
-  SCREENS: farooqremote-accounts-2.7-6-screens.zip
+  RELEASE_TAG: accounts-2.7-7
+  ASSET: farooqremote-accounts-2.7-7-linux-arm64.tar.gz
+  SCREENS: farooqremote-accounts-2.7-7-screens.zip
   PLAYWRIGHT_VERSION: "1.49.1"
 
 jobs:

@@ -107,6 +107,12 @@ func TestAllow(t *testing.T) {
 	}
 }
 
+func TestMailIcon(t *testing.T) {
+	if len(mailIcon) < 500 || string(mailIcon[1:4]) != "PNG" {
+		t.Fatal("mail-icon.png missing or not a PNG")
+	}
+}
+
 func TestMail(t *testing.T) {
 	for _, kind := range []string{PurposeSign, PurposeReset, "exists"} {
 		for _, l := range []string{"en", "ur", "ar", "xx"} {
@@ -124,6 +130,10 @@ func TestMail(t *testing.T) {
 			msg := string(Message("Farooq Remote", "info@farooqmughal.net", "a@b.com", subj, text, html, time.Now()))
 			if !strings.Contains(msg, "Content-Transfer-Encoding: base64") || strings.Contains(msg, "\n\n\n") {
 				t.Fatal("message shape", kind, l)
+			}
+			if !strings.Contains(html, "cid:"+MailIconCID) || !strings.Contains(msg, "Content-ID: <"+MailIconCID+">") ||
+				!strings.Contains(msg, "multipart/related") || !strings.Contains(msg, "Content-Type: image/png") {
+				t.Fatal("the icon is not inside the mail", kind, l)
 			}
 			for _, line := range strings.Split(msg, "\r\n") {
 				if len(line) > 998 {

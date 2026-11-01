@@ -22,6 +22,7 @@ stays untouched and the build fails if a patch no longer matches.
 | `ci/signup_test.py` | 2.7-3: the build runs the whole sign-up / forgot-password flow with mails written to files. |
 | `api/utils/farooq_captcha.go` (+ `_test.go`) | 2.7-5: our own drawing of the picture code (see below). |
 | `web/src/assets/logo.png`, `web/public/favicon.ico` | 2.7-6: Farooq Remote's own icon (the app's icon from the owner's branding files) as the logo and the browser-tab icon. |
+| `web/public/company-logo.png`, `hello.html`, `api/lib/frsignup/mail-icon.png` | 2.7-7: the company logo in the welcome box; the app icon inside the sign-up / password mails. |
 
 Upstream changes made by `apply-patches.py`: Arabic + Urdu in the language list; a browser language such as en-US,
 ur-PK or ar-QA opens its own language (upstream showed raw keys for en-US); `dir="rtl"` + `lang` on `<html>`; a missing
@@ -74,3 +75,13 @@ the app's own icon (the teal monitor with the amber arc — the same picture the
 `App-logo-icon.jpg` with its painted checkerboard keyed out) on a white rounded square, and `web/public/favicon.ico`
 the icon itself in 16/32/48/64 pixels. `index.html` and the store's default title say «Farooq Remote» instead of
 «Rustdesk API Admin». Everything of 2.7-5 stays.
+
+## 2.7-7 — the company logo and the icon in the mails (owner 1 Nov 2026)
+
+His choices for the branding files: the company logo at the bottom of the pages and in the welcome box, and the icon at
+the top of the e-mails. `web/public/company-logo.png` (his `Company-logo.jpg` — the FM mark and FAROOQ MUGHAL — cut to its
+content on a white rounded plate, 360 px, 256 colours) is served at `/_admin/company-logo.png` and shown 180 px wide under
+the welcome text in every language (`hello.html`). The sign-up, password and «already have an account» mails carry the
+app icon inside the mail (`mail-icon.png`, 96 px, `Content-ID: <frlogo@farooqmughal.net>`, multipart/related), shown 40 px
+before «Farooq Remote», so it shows even where a mail program blocks pictures from the web; `frsignup_test.go` checks it.
+`ci/screens.mjs` removes passing message boxes («Login success», «We sent the code») before each picture.
