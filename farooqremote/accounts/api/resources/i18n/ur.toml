@@ -1,0 +1,169 @@
+[Test]
+description = "test"
+one = "test1 "
+other = "Test2 {{.P0}}"
+
+[ParamsError]
+description = "Params validation failed."
+one = "دی گئی معلومات درست نہیں۔"
+other = "دی گئی معلومات درست نہیں۔"
+
+[OperationFailed]
+description = "OperationFailed."
+one = "کام نہیں ہو سکا۔"
+other = "کام نہیں ہو سکا۔"
+
+[OperationSuccess]
+description = "OperationSuccess."
+one = "کام ہو گیا۔"
+other = "کام ہو گیا۔"
+
+[ItemExists]
+description = "Item already exists."
+one = "یہ پہلے سے موجود ہے۔"
+other = "یہ پہلے سے موجود ہے۔"
+
+[ItemNotFound]
+description = "Item not found."
+one = "یہ نہیں ملا۔"
+other = "یہ نہیں ملا۔"
+
+[NoAccess]
+description = "No access."
+one = "آپ کو اجازت نہیں۔"
+other = "آپ کو اجازت نہیں۔"
+
+[NeedLogin]
+description = "Please log in first."
+one = "براہِ کرم پہلے لاگ ان کریں۔"
+other = "براہِ کرم پہلے لاگ ان کریں۔"
+
+[UsernameOrPasswordError]
+description = "Username or password error."
+one = "صارف نام یا پاس ورڈ غلط ہے۔"
+other = "صارف نام یا پاس ورڈ غلط ہے۔"
+
+[SystemError]
+description = "System error."
+one = "سسٹم میں خرابی۔"
+other = "سسٹم میں خرابی۔"
+
+[ConfigNotFound]
+description = "Config not found."
+one = "ترتیب نہیں ملی۔"
+other = "ترتیب نہیں ملی۔"
+
+[OauthExpired]
+description = "Oauth expired, please try again."
+one = "اجازت کا وقت ختم ہو گیا، دوبارہ کوشش کریں۔"
+other = "اجازت کا وقت ختم ہو گیا، دوبارہ کوشش کریں۔"
+
+[OauthFailed]
+description = "Oauth failed."
+one = "اجازت نہیں مل سکی۔"
+other = "اجازت نہیں مل سکی۔"
+
+[OauthHasBindOtherUser]
+description = "Oauth has bind other user."
+one = "یہ اکاؤنٹ کسی اور صارف سے منسلک ہے۔"
+other = "یہ اکاؤنٹ کسی اور صارف سے منسلک ہے۔"
+
+[ParamIsEmpty]
+description = "{{.P0}} is empty."
+one = "{{.P0}} خالی ہے۔"
+other = "{{.P0}} خالی ہے۔"
+
+[BindFail]
+description = "Bind fail."
+one = "منسلک نہیں ہو سکا۔"
+other = "منسلک نہیں ہو سکا۔"
+
+[BindSuccess]
+description = "Bind success."
+one = "منسلک ہو گیا۔"
+other = "منسلک ہو گیا۔"
+
+[OauthHasBeenSuccess]
+description = "Oauth has been success."
+one = "اجازت پہلے ہی مل چکی ہے۔"
+other = "اجازت پہلے ہی مل چکی ہے۔"
+
+[OauthSuccess]
+description = "Oauth success."
+one = "اجازت مل گئی۔"
+other = "اجازت مل گئی۔"
+
+[OauthRegisterSuccess]
+description = "Oauth register success."
+one = "اکاؤنٹ بن گیا۔"
+other = "اکاؤنٹ بن گیا۔"
+
+[OauthRegisterFailed]
+description = "Oauth register failed."
+one = "اکاؤنٹ نہیں بن سکا۔"
+other = "اکاؤنٹ نہیں بن سکا۔"
+
+[GetOauthTokenError]
+description = "Get oauth token error."
+one = "اجازت کا ٹوکن نہیں مل سکا۔"
+other = "اجازت کا ٹوکن نہیں مل سکا۔"
+
+[GetOauthUserInfoError]
+description = "Get oauth user info error."
+one = "صارف کی معلومات نہیں مل سکیں۔"
+other = "صارف کی معلومات نہیں مل سکیں۔"
+
+[DecodeOauthUserInfoError]
+description = "Decode oauth user info error."
+one = "صارف کی معلومات پڑھی نہیں جا سکیں۔"
+other = "صارف کی معلومات پڑھی نہیں جا سکیں۔"
+
+[OldPasswordError]
+description = "Old password error."
+one = "پرانا پاس ورڈ غلط ہے۔"
+other = "پرانا پاس ورڈ غلط ہے۔"
+
+[DefaultGroup]
+description = "Default Group"
+one = "بنیادی گروپ"
+other = "بنیادی گروپ"
+
+[ShareGroup]
+description = "Share Group"
+one = "مشترکہ گروپ"
+other = "مشترکہ گروپ"
+
+[RegisterClosed]
+description = "Register closed."
+one = "نئے اکاؤنٹ بند ہیں۔"
+other = "نئے اکاؤنٹ بند ہیں۔"
+
+[CaptchaRequired]
+description = "Captcha required."
+one = "تصویری کوڈ لکھیں۔"
+other = "تصویری کوڈ لکھیں۔"
+
+[CaptchaError]
+description = "Captcha error."
+one = "تصویری کوڈ غلط ہے۔"
+other = "تصویری کوڈ غلط ہے۔"
+
+[PwdLoginDisabled]
+description = "Password login disabled."
+one = "پاس ورڈ سے لاگ ان بند ہے۔"
+other = "پاس ورڈ سے لاگ ان بند ہے۔"
+
+[CannotShareToSelf]
+description = "Cannot share to self."
+one = "اپنے آپ سے شیئر نہیں کیا جا سکتا۔"
+other = "اپنے آپ سے شیئر نہیں کیا جا سکتا۔"
+
+[Banned]
+description = "Banned."
+one = "بہت زیادہ غلط کوششیں — یہ پتہ کچھ دیر کے لیے بند ہے۔"
+other = "بہت زیادہ غلط کوششیں — یہ پتہ کچھ دیر کے لیے بند ہے۔"
+
+[RegisterSuccessWaitAdminConfirm]
+description = "Register success, wait admin confirm."
+one = "اکاؤنٹ بن گیا، ایڈمن کی منظوری کا انتظار کریں۔"
+other = "اکاؤنٹ بن گیا، ایڈمن کی منظوری کا انتظار کریں۔"

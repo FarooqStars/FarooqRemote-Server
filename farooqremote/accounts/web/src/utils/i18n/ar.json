@@ -1,0 +1,613 @@
+{
+  "Login": {
+    "One": "تسجيل الدخول"
+  },
+  "Logout": {
+    "One": "تسجيل الخروج"
+  },
+  "Register": {
+    "One": "التسجيل"
+  },
+  "Confirm": {
+    "One": "تأكيد"
+  },
+  "Username": {
+    "One": "اسم المستخدم"
+  },
+  "Password": {
+    "One": "كلمة المرور"
+  },
+  "LoginSuccess": {
+    "One": "تم تسجيل الدخول بنجاح"
+  },
+  "ForgotPassword": {
+    "One": "نسيت كلمة المرور"
+  },
+  "ResetPassword": {
+    "One": "إعادة تعيين كلمة المرور"
+  },
+  "ChangePassword": {
+    "One": "تغيير كلمة المرور"
+  },
+  "Userinfo": {
+    "One": "معلوماتي"
+  },
+  "ParamRequired": {
+    "One": "{param} مطلوب"
+  },
+  "HasBind": {
+    "One": "مرتبط"
+  },
+  "NoBind": {
+    "One": "غير مرتبط"
+  },
+  "UnBind": {
+    "One": "إلغاء الربط"
+  },
+  "ToBind": {
+    "One": "ربط"
+  },
+  "Confirm?": {
+    "One": "{param} — هل أنت متأكد؟"
+  },
+  "Cancel": {
+    "One": "إلغاء"
+  },
+  "Platform": {
+    "One": "المنصة"
+  },
+  "Status": {
+    "One": "الحالة"
+  },
+  "Actions": {
+    "One": "الإجراءات"
+  },
+  "Filter": {
+    "One": "تصفية"
+  },
+  "Add": {
+    "One": "إضافة"
+  },
+  "Hostname": {
+    "One": "اسم الجهاز"
+  },
+  "Alias": {
+    "One": "الاسم المستعار"
+  },
+  "Hash": {
+    "One": "التجزئة"
+  },
+  "Tags": {
+    "One": "الوسوم"
+  },
+  "Edit": {
+    "One": "تعديل"
+  },
+  "Delete": {
+    "One": "حذف"
+  },
+  "Create": {
+    "One": "إنشاء"
+  },
+  "Update": {
+    "One": "تحديث"
+  },
+  "LoginName": {
+    "One": "اسم الدخول"
+  },
+  "Submit": {
+    "One": "إرسال"
+  },
+  "OperationSuccess": {
+    "One": "تمت العملية بنجاح"
+  },
+  "Owner": {
+    "One": "المالك"
+  },
+  "Name": {
+    "One": "الاسم"
+  },
+  "Color": {
+    "One": "اللون"
+  },
+  "CreatedAt": {
+    "One": "تاريخ الإنشاء"
+  },
+  "UpdatedAt": {
+    "One": "تاريخ التحديث"
+  },
+  "Memory": {
+    "One": "الذاكرة"
+  },
+  "Os": {
+    "One": "نظام التشغيل"
+  },
+  "Uuid": {
+    "One": "UUID"
+  },
+  "Version": {
+    "One": "الإصدار"
+  },
+  "Type": {
+    "One": "النوع"
+  },
+  "Group": {
+    "One": "المجموعة"
+  },
+  "CommonGroup": {
+    "One": "مجموعة عادية"
+  },
+  "CommonGroupNote": {
+    "One": "يمكن للمشرفين فقط رؤية أعضاء المجموعة وأجهزتهم"
+  },
+  "SharedGroup": {
+    "One": "مجموعة مشتركة"
+  },
+  "SharedGroupNote": {
+    "One": "يمكن لجميع المستخدمين رؤية أعضاء المجموعة وأجهزتهم"
+  },
+  "Nickname": {
+    "One": "الاسم الظاهر"
+  },
+  "UserTags": {
+    "One": "وسوم المستخدم"
+  },
+  "UserAddressBook": {
+    "One": "دفتر عناوين المستخدم"
+  },
+  "IsAdmin": {
+    "One": "مشرف"
+  },
+  "PleaseInputNewPassword": {
+    "One": "يرجى إدخال كلمة مرور جديدة"
+  },
+  "AutoRegister": {
+    "One": "التسجيل التلقائي"
+  },
+  "AutoRegisterNote": {
+    "One": "عند التفعيل يُنشأ حساب تلقائيًا للمستخدم الذي يسجّل الدخول عبر OAuth دون ربطه بحساب موجود"
+  },
+  "ThirdName": {
+    "One": "اسم الخدمة الخارجية"
+  },
+  "Close": {
+    "One": "إغلاق"
+  },
+  "OauthBinding": {
+    "One": "أنت تأذن بربط الحساب"
+  },
+  "OauthLogining": {
+    "One": "أنت تأذن بتسجيل الدخول"
+  },
+  "OauthCloseNote": {
+    "One": "إذا لم تطلب هذا الإذن بنفسك فأغلق الصفحة مباشرة"
+  },
+  "OperationSuccessAndCloseAfter3Seconds": {
+    "One": "تمت العملية بنجاح، ستُغلق الصفحة بعد 3 ثوانٍ"
+  },
+  "ConfirmOauth": {
+    "One": "تأكيد الإذن"
+  },
+  "Device": {
+    "One": "الجهاز"
+  },
+  "ChangeLang": {
+    "One": "تغيير اللغة"
+  },
+  "My": {
+    "One": "حسابي"
+  },
+  "Info": {
+    "One": "معلومات"
+  },
+  "AddressBooks": {
+    "One": "دفاتر العناوين"
+  },
+  "System": {
+    "One": "النظام"
+  },
+  "PeerManage": {
+    "One": "الأجهزة"
+  },
+  "AddressBookManage": {
+    "One": "دفاتر العناوين"
+  },
+  "GroupManage": {
+    "One": "المجموعات"
+  },
+  "UserManage": {
+    "One": "المستخدمون"
+  },
+  "UserAdd": {
+    "One": "إضافة مستخدم"
+  },
+  "UserEdit": {
+    "One": "تعديل مستخدم"
+  },
+  "TagsManage": {
+    "One": "الوسوم"
+  },
+  "OauthManage": {
+    "One": "OAuth"
+  },
+  "LoginLog": {
+    "One": "سجل الدخول"
+  },
+  "LastOnlineTime": {
+    "One": "آخر ظهور"
+  },
+  "JustNow": {
+    "One": "الآن"
+  },
+  "MinutesAgo": {
+    "One": "قبل {param} دقيقة",
+    "Other": "قبل {param} دقيقة"
+  },
+  "HoursAgo": {
+    "One": "قبل {param} ساعة",
+    "Other": "قبل {param} ساعة"
+  },
+  "DaysAgo": {
+    "One": "قبل {param} يوم",
+    "Other": "قبل {param} يوم"
+  },
+  "MonthsAgo": {
+    "One": "قبل {param} شهر",
+    "Other": "قبل {param} شهر"
+  },
+  "YearsAgo": {
+    "One": "قبل {param} سنة",
+    "Other": "قبل {param} سنة"
+  },
+  "MinutesLess": {
+    "One": "أقل من {param} دقيقة",
+    "Other": "أقل من {param} دقيقة"
+  },
+  "HoursLess": {
+    "One": "أقل من {param} ساعة",
+    "Other": "أقل من {param} ساعة"
+  },
+  "DaysLess": {
+    "One": "أقل من {param} يوم",
+    "Other": "أقل من {param} يوم"
+  },
+  "Export": {
+    "One": "تصدير"
+  },
+  "AddToAddressBook": {
+    "One": "إضافة إلى دفتر العناوين"
+  },
+  "BatchDelete": {
+    "One": "حذف المحدد"
+  },
+  "PleaseSelectData": {
+    "One": "يرجى تحديد عنصر أولًا"
+  },
+  "PasswordType": {
+    "One": "نوع كلمة المرور"
+  },
+  "OncePassword": {
+    "One": "كلمة مرور لمرة واحدة"
+  },
+  "FixedPassword": {
+    "One": "كلمة مرور ثابتة"
+  },
+  "FixedPasswordWarning": {
+    "One": "قد تتسرّب كلمة المرور الثابتة، فاستخدمها بحذر؛ يُنصح بكلمة مرور لمرة واحدة"
+  },
+  "ExpireTime": {
+    "One": "وقت الانتهاء"
+  },
+  "ShareByWebClient": {
+    "One": "المشاركة عبر تطبيق الويب"
+  },
+  "Minutes": {
+    "One": "{param} دقيقة",
+    "Other": "{param} دقيقة"
+  },
+  "Hours": {
+    "One": "{param} ساعة",
+    "Other": "{param} ساعة"
+  },
+  "Days": {
+    "One": "{param} يوم",
+    "Other": "{param} يوم"
+  },
+  "Weeks": {
+    "One": "{param} أسبوع",
+    "Other": "{param} أسبوع"
+  },
+  "Months": {
+    "One": "{param} شهر",
+    "Other": "{param} شهر"
+  },
+  "Forever": {
+    "One": "دائمًا"
+  },
+  "Error": {
+    "One": "خطأ"
+  },
+  "IDNotExist": {
+    "One": "هذا المعرّف غير موجود"
+  },
+  "RemoteDesktopOffline": {
+    "One": "الجهاز البعيد غير متصل"
+  },
+  "KeyMismatch": {
+    "One": "المفتاح غير مطابق"
+  },
+  "KeyOveruse": {
+    "One": "تم تجاوز حد استخدام المفتاح"
+  },
+  "Link": {
+    "One": "الرابط"
+  },
+  "CopySuccess": {
+    "One": "تم النسخ"
+  },
+  "CopyFailed": {
+    "One": "تعذّر النسخ"
+  },
+  "Timeout": {
+    "One": "انتهت المهلة"
+  },
+  "AuditConnLog": {
+    "One": "سجل الاتصالات"
+  },
+  "Peer": {
+    "One": "جهاز",
+    "Other": "أجهزة"
+  },
+  "FromPeer": {
+    "One": "من الجهاز"
+  },
+  "FromName": {
+    "One": "من الاسم"
+  },
+  "CloseTime": {
+    "One": "وقت الإغلاق"
+  },
+  "AuditFileLog": {
+    "One": "سجل الملفات"
+  },
+  "Common": {
+    "One": "عادي"
+  },
+  "File": {
+    "One": "ملف"
+  },
+  "Num": {
+    "One": "العدد"
+  },
+  "Ip": {
+    "One": "IP"
+  },
+  "FileName": {
+    "One": "اسم الملف"
+  },
+  "FileInfo": {
+    "One": "معلومات الملف"
+  },
+  "Path": {
+    "One": "المسار"
+  },
+  "IndexNum": {
+    "One": "الرقم"
+  },
+  "ToRemote": {
+    "One": "إلى الجهاز البعيد"
+  },
+  "ToLocal": {
+    "One": "إلى الجهاز المحلي"
+  },
+  "AddressBookName": {
+    "One": "اسم دفتر العناوين"
+  },
+  "AddressBookCollection": {
+    "One": "مجموعة دفاتر العناوين"
+  },
+  "AddRule": {
+    "One": "إضافة قاعدة"
+  },
+  "ShareRules": {
+    "One": "قواعد المشاركة"
+  },
+  "Rule": {
+    "One": "القاعدة"
+  },
+  "Read": {
+    "One": "قراءة"
+  },
+  "ReadWrite": {
+    "One": "قراءة وكتابة"
+  },
+  "FullControl": {
+    "One": "تحكم كامل"
+  },
+  "ShareTo": {
+    "One": "مشاركة مع"
+  },
+  "MyAddressBook": {
+    "One": "دفتر عناويني"
+  },
+  "AddressBook": {
+    "One": "دفتر العناوين"
+  },
+  "AddressBookNameManage": {
+    "One": "أسماء دفاتر العناوين"
+  },
+  "MyAddressBookTips": {
+    "One": "«دفتر عناويني» هو الدفتر الافتراضي للنظام ولا يمكن تعديله أو حذفه"
+  },
+  "LastOnlineIp": {
+    "One": "آخر عنوان IP"
+  },
+  "or login in with": {
+    "One": "أو سجّل الدخول باستخدام"
+  },
+  "Optional, default is": {
+    "One": "اختياري، القيمة الافتراضية:"
+  },
+  "Check your IdP docs, without": {
+    "One": "راجع وثائق مزوّد الهوية، بدون:"
+  },
+  "For OIDC login without a password, enter any 4-20 letters": {
+    "One": "لتسجيل الدخول عبر OIDC بدون كلمة مرور، أدخل أي 4 إلى 20 حرفًا"
+  },
+  "OldPassword": {
+    "One": "كلمة المرور القديمة"
+  },
+  "NewPassword": {
+    "One": "كلمة المرور الجديدة"
+  },
+  "NewPasswordEqualOldPassword": {
+    "One": "لا يمكن أن تطابق كلمة المرور الجديدة القديمة"
+  },
+  "ConfirmPassword": {
+    "One": "تأكيد كلمة المرور"
+  },
+  "PasswordNotMatchConfirmPassword": {
+    "One": "كلمتا المرور غير متطابقتين"
+  },
+  "ToLogin": {
+    "One": "الانتقال إلى تسجيل الدخول"
+  },
+  "UserToken": {
+    "One": "رموز المستخدم"
+  },
+  "Email": {
+    "One": "البريد الإلكتروني"
+  },
+  "MyPeer": {
+    "One": "أجهزتي"
+  },
+  "View": {
+    "One": "عرض"
+  },
+  "Information": {
+    "One": "معلومات"
+  },
+  "BatchAddToAB": {
+    "One": "إضافة المحدد إلى دفتر العناوين"
+  },
+  "BatchEditTags": {
+    "One": "تعديل وسوم المحدد"
+  },
+  "User": {
+    "One": "المستخدم"
+  },
+  "ShareRecord": {
+    "One": "سجل المشاركة"
+  },
+  "Second": {
+    "One": "ثانية"
+  },
+  "Captcha": {
+    "One": "رمز التحقق"
+  },
+  "ServerCmd": {
+    "One": "أوامر الخادم"
+  },
+  "Simple": {
+    "One": "بسيط"
+  },
+  "Advanced": {
+    "One": "متقدم"
+  },
+  "Available": {
+    "One": "متاح"
+  },
+  "NotAvailable": {
+    "One": "غير متاح"
+  },
+  "ServerCmdTips": {
+    "One": "هذه الميزة تجريبية. تأكد من أن الـ API وhbbs وhbbr على عنوان الاسترجاع نفسه. لمزيد من المعلومات راجع {wiki}"
+  },
+  "Refresh": {
+    "One": "إعادة تحميل"
+  },
+  "Save": {
+    "One": "حفظ"
+  },
+  "SendCustom": {
+    "One": "إرسال أمر مخصص"
+  },
+  "Send": {
+    "One": "إرسال"
+  },
+  "SendCmd": {
+    "One": "إرسال الأمر"
+  },
+  "Result": {
+    "One": "النتيجة"
+  },
+  "DeviceGroupManage": {
+    "One": "مجموعات الأجهزة"
+  },
+  "Import": {
+    "One": "استيراد"
+  },
+  "Drop file here or click to upload": {
+    "One": "اسحب الملف إلى هنا أو انقر للرفع"
+  },
+  "Please upload csv file": {
+    "One": "يرجى رفع ملف CSV"
+  },
+  "Columns": {
+    "One": "الأعمدة"
+  },
+  "You can reference export file": {
+    "One": "يمكنك الاستعانة بملف التصدير"
+  },
+  "Remark": {
+    "One": "ملاحظة"
+  },
+  "Token": {
+    "One": "الرمز"
+  },
+  "Bind": {
+    "One": "ربط"
+  },
+  "ID": {
+    "One": "المعرّف"
+  },
+  "Id": {
+    "One": "المعرّف"
+  },
+  "IdP": {
+    "One": "مزوّد الهوية"
+  },
+  "InvalidParam": {
+    "One": "قيمة غير صالحة"
+  },
+  "More": {
+    "One": "المزيد"
+  },
+  "Op": {
+    "One": "المزوّد"
+  },
+  "PkceEnable": {
+    "One": "تفعيل PKCE"
+  },
+  "PkceMethod": {
+    "One": "طريقة PKCE"
+  },
+  "Size": {
+    "One": "الحجم"
+  },
+  "Success": {
+    "One": "نجاح"
+  },
+  "Your IdP Name": {
+    "One": "اسم مزوّد الهوية"
+  },
+  "OauthBind": {
+    "One": "ربط OAuth"
+  },
+  "OauthLogin": {
+    "One": "تسجيل الدخول عبر OAuth"
+  },
+  "首页": {
+    "One": "الرئيسية"
+  }
+}

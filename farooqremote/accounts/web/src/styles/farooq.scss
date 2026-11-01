@@ -1,0 +1,189 @@
+// Farooq Remote (FA-020, owner 1 Nov 2026): Urdu and Arabic for the admin page.
+// "FS Urdu" = Noto Naskh Arabic (SIL OFL 1.1, ../assets/fonts/OFL-NotoNaskhArabic.txt) - the same Urdu font as
+// farooqstars.com and farooqmughal.net. It covers only Arabic-script letters (unicode-range), so English words keep
+// the normal font. Everything under html[dir='rtl'] mirrors the layout for Urdu and Arabic (store/app.js sets dir + lang).
+
+@font-face {
+  font-family: 'FS Urdu';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  size-adjust: 112%;
+  src: url('../assets/fonts/noto-naskh-arabic-arabic-400-normal.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E,
+    U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+  font-family: 'FS Urdu';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  size-adjust: 112%;
+  src: url('../assets/fonts/noto-naskh-arabic-arabic-700-normal.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E,
+    U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+// FS Urdu first for every language: thanks to unicode-range it is used only for Urdu / Arabic letters (page words,
+// device names, the language menu), and everything else falls through to the normal fonts.
+:root {
+  --el-font-family: 'FS Urdu', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+}
+
+body {
+  font-family: var(--el-font-family);
+}
+
+// language links under the login form
+.fr-langs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 14px;
+  margin-top: 18px;
+  font-size: 14px;
+
+  a {
+    cursor: pointer;
+    color: var(--el-color-primary);
+    text-decoration: none;
+  }
+
+  a.on {
+    font-weight: 700;
+    color: var(--el-text-color-primary);
+  }
+}
+
+html[dir='rtl'] {
+  // header: menu button, logo + title on the right, the settings on the left
+  .ex-icon {
+    margin-right: 0 !important;
+    margin-left: 10px;
+  }
+
+  .header-logo .title {
+    margin-left: 0 !important;
+    margin-right: 10px;
+  }
+
+  .setting {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+  }
+
+  .setting .menu-item {
+    margin-left: 0 !important;
+    margin-right: 15px;
+  }
+
+  // side menu
+  .el-menu-item [class^='el-icon'],
+  .el-sub-menu .el-icon {
+    margin-right: 0;
+    margin-left: 5px;
+  }
+
+  .el-sub-menu .el-icon.el-sub-menu__icon-more {
+    margin-left: 0 !important;
+  }
+
+  .el-sub-menu .el-sub-menu__icon-arrow {
+    right: auto;
+    left: var(--el-menu-base-level-padding);
+  }
+
+  .el-menu--vertical:not(.el-menu--collapse):not(.el-menu--popup-container) .el-menu-item,
+  .el-menu--vertical:not(.el-menu--collapse):not(.el-menu--popup-container) .el-menu-item-group__title,
+  .el-menu--vertical:not(.el-menu--collapse):not(.el-menu--popup-container) .el-sub-menu__title {
+    padding-left: var(--el-menu-base-level-padding);
+    padding-right: calc(var(--el-menu-base-level-padding) + var(--el-menu-level) * var(--el-menu-level-padding));
+  }
+
+  .el-menu--vertical:not(.el-menu--collapse):not(.el-menu--popup-container) .el-sub-menu__title {
+    padding-left: calc(var(--el-menu-base-level-padding) + var(--el-menu-icon-width));
+  }
+
+  // dialogs and message boxes: the close button on the left, buttons start from the right
+  .el-dialog__headerbtn,
+  .el-message-box__headerbtn {
+    right: auto;
+    left: 0;
+  }
+
+  .el-dialog__footer {
+    text-align: left;
+  }
+
+  .el-button + .el-button {
+    margin-left: 0;
+    margin-right: 12px;
+  }
+
+  // forms
+  .el-form-item__label {
+    padding: 0 0 0 12px;
+  }
+
+  .el-input__prefix-inner > :last-child {
+    margin-right: 0;
+    margin-left: 8px;
+  }
+
+  .el-input__suffix-inner > :first-child {
+    margin-left: 0;
+    margin-right: 8px;
+  }
+
+  .el-checkbox {
+    margin-right: 0;
+    margin-left: 30px;
+  }
+
+  .el-checkbox:last-of-type {
+    margin-left: 0;
+  }
+
+  .el-checkbox__label {
+    padding-left: 0;
+    padding-right: 8px;
+  }
+
+  .el-radio {
+    margin-right: 0;
+    margin-left: 30px;
+  }
+
+  .el-radio:last-child {
+    margin-left: 0;
+  }
+
+  .el-radio__label {
+    padding-left: 0;
+    padding-right: 8px;
+  }
+
+  .el-tag .el-tag__close {
+    margin-left: 0;
+    margin-right: 6px;
+  }
+
+  // tables read from the right
+  .el-table .el-table__cell {
+    text-align: right;
+  }
+
+  // pagination: spacing on the other side, the arrows point the reading way
+  .el-pagination__total,
+  .el-pagination__jump {
+    margin-left: 0;
+    margin-right: var(--el-pagination-item-gap);
+  }
+
+  .el-pagination .btn-prev .el-icon,
+  .el-pagination .btn-next .el-icon {
+    transform: scaleX(-1);
+  }
+}

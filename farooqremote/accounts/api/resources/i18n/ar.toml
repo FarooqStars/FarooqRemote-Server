@@ -1,0 +1,169 @@
+[Test]
+description = "test"
+one = "test1 "
+other = "Test2 {{.P0}}"
+
+[ParamsError]
+description = "Params validation failed."
+one = "البيانات المدخلة غير صالحة."
+other = "البيانات المدخلة غير صالحة."
+
+[OperationFailed]
+description = "OperationFailed."
+one = "فشلت العملية."
+other = "فشلت العملية."
+
+[OperationSuccess]
+description = "OperationSuccess."
+one = "تمت العملية بنجاح."
+other = "تمت العملية بنجاح."
+
+[ItemExists]
+description = "Item already exists."
+one = "العنصر موجود بالفعل."
+other = "العنصر موجود بالفعل."
+
+[ItemNotFound]
+description = "Item not found."
+one = "العنصر غير موجود."
+other = "العنصر غير موجود."
+
+[NoAccess]
+description = "No access."
+one = "ليس لديك صلاحية."
+other = "ليس لديك صلاحية."
+
+[NeedLogin]
+description = "Please log in first."
+one = "يرجى تسجيل الدخول أولًا."
+other = "يرجى تسجيل الدخول أولًا."
+
+[UsernameOrPasswordError]
+description = "Username or password error."
+one = "اسم المستخدم أو كلمة المرور غير صحيحة."
+other = "اسم المستخدم أو كلمة المرور غير صحيحة."
+
+[SystemError]
+description = "System error."
+one = "خطأ في النظام."
+other = "خطأ في النظام."
+
+[ConfigNotFound]
+description = "Config not found."
+one = "الإعداد غير موجود."
+other = "الإعداد غير موجود."
+
+[OauthExpired]
+description = "Oauth expired, please try again."
+one = "انتهت صلاحية الإذن، حاول مرة أخرى."
+other = "انتهت صلاحية الإذن، حاول مرة أخرى."
+
+[OauthFailed]
+description = "Oauth failed."
+one = "فشل الإذن."
+other = "فشل الإذن."
+
+[OauthHasBindOtherUser]
+description = "Oauth has bind other user."
+one = "هذا الحساب مرتبط بمستخدم آخر."
+other = "هذا الحساب مرتبط بمستخدم آخر."
+
+[ParamIsEmpty]
+description = "{{.P0}} is empty."
+one = "{{.P0}} فارغ."
+other = "{{.P0}} فارغ."
+
+[BindFail]
+description = "Bind fail."
+one = "فشل الربط."
+other = "فشل الربط."
+
+[BindSuccess]
+description = "Bind success."
+one = "تم الربط بنجاح."
+other = "تم الربط بنجاح."
+
+[OauthHasBeenSuccess]
+description = "Oauth has been success."
+one = "تم الإذن مسبقًا."
+other = "تم الإذن مسبقًا."
+
+[OauthSuccess]
+description = "Oauth success."
+one = "تم الإذن بنجاح."
+other = "تم الإذن بنجاح."
+
+[OauthRegisterSuccess]
+description = "Oauth register success."
+one = "تم إنشاء الحساب بنجاح."
+other = "تم إنشاء الحساب بنجاح."
+
+[OauthRegisterFailed]
+description = "Oauth register failed."
+one = "فشل إنشاء الحساب."
+other = "فشل إنشاء الحساب."
+
+[GetOauthTokenError]
+description = "Get oauth token error."
+one = "تعذّر الحصول على رمز الإذن."
+other = "تعذّر الحصول على رمز الإذن."
+
+[GetOauthUserInfoError]
+description = "Get oauth user info error."
+one = "تعذّر الحصول على معلومات المستخدم."
+other = "تعذّر الحصول على معلومات المستخدم."
+
+[DecodeOauthUserInfoError]
+description = "Decode oauth user info error."
+one = "تعذّر قراءة معلومات المستخدم."
+other = "تعذّر قراءة معلومات المستخدم."
+
+[OldPasswordError]
+description = "Old password error."
+one = "كلمة المرور القديمة غير صحيحة."
+other = "كلمة المرور القديمة غير صحيحة."
+
+[DefaultGroup]
+description = "Default Group"
+one = "المجموعة الافتراضية"
+other = "المجموعة الافتراضية"
+
+[ShareGroup]
+description = "Share Group"
+one = "المجموعة المشتركة"
+other = "المجموعة المشتركة"
+
+[RegisterClosed]
+description = "Register closed."
+one = "التسجيل مغلق."
+other = "التسجيل مغلق."
+
+[CaptchaRequired]
+description = "Captcha required."
+one = "رمز التحقق مطلوب."
+other = "رمز التحقق مطلوب."
+
+[CaptchaError]
+description = "Captcha error."
+one = "رمز التحقق غير صحيح."
+other = "رمز التحقق غير صحيح."
+
+[PwdLoginDisabled]
+description = "Password login disabled."
+one = "تسجيل الدخول بكلمة المرور معطّل."
+other = "تسجيل الدخول بكلمة المرور معطّل."
+
+[CannotShareToSelf]
+description = "Cannot share to self."
+one = "لا يمكنك المشاركة مع نفسك."
+other = "لا يمكنك المشاركة مع نفسك."
+
+[Banned]
+description = "Banned."
+one = "محاولات خاطئة كثيرة — تم حظر هذا العنوان مؤقتًا."
+other = "محاولات خاطئة كثيرة — تم حظر هذا العنوان مؤقتًا."
+
+[RegisterSuccessWaitAdminConfirm]
+description = "Register success, wait admin confirm."
+one = "تم التسجيل، بانتظار موافقة المشرف."
+other = "تم التسجيل، بانتظار موافقة المشرف."

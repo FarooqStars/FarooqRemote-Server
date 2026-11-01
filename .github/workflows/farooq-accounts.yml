@@ -4,14 +4,17 @@ name: Farooq Remote - account server (linux-arm64)
 # Builds the account server lejianwen/rustdesk-api 2.7 (MIT) and its admin page lejianwen/rustdesk-api-web (MIT)
 # from PINNED source on GitHub's own ARM runner, tests that the program starts and answers, and publishes it as a
 # release of this repository with its SHA256. FR-08-ACCOUNTS.bat installs it on the Oracle VM and checks that SHA256.
+# 2.7-2 (owner 1 Nov 2026, «add Arabic & Urdu ... with URDU naskh fonts»): farooqremote/accounts/apply-patches.py adds
+# Urdu + Arabic (words, labels, server messages, right-to-left, the Naskh font FS Urdu) before the build, and the run
+# takes pictures of the admin page in English, Urdu and Arabic (ci/screens.mjs, demo data only) for the release.
 #
-# Runs when this file is pushed to farooq/develop (or from the Actions tab). Nothing else in this repository changes;
-# master stays the upstream mirror. No secrets are used - only this run's own GITHUB_TOKEN, to publish the release.
+# Runs when this file or farooqremote/accounts/ is pushed to farooq/develop (or from the Actions tab). master stays the
+# upstream mirror. No secrets are used - only this run's own GITHUB_TOKEN, to publish the release.
 
 on:
   push:
     branches: [ "farooq/develop" ]
-    paths: [ ".github/workflows/farooq-accounts.yml" ]
+    paths: [ ".github/workflows/farooq-accounts.yml", "farooqremote/accounts/**" ]
   workflow_dispatch:
 
 permissions:
@@ -25,8 +28,10 @@ env:
   WEB_COMMIT: 3998c2a9213fcd047252776d0f0db33e6717026c   # master when v2.7 was released (31 Aug 2025)
   GO_VERSION: "1.23.10"                                    # the toolchain line of rustdesk-api go.mod
   NODE_VERSION: "20"                                       # as upstream build.yml
-  RELEASE_TAG: accounts-2.7-1
-  ASSET: farooqremote-accounts-2.7-linux-arm64.tar.gz
+  RELEASE_TAG: accounts-2.7-2
+  ASSET: farooqremote-accounts-2.7-2-linux-arm64.tar.gz
+  SCREENS: farooqremote-accounts-2.7-2-screens.zip
+  PLAYWRIGHT_VERSION: "1.49.1"
 
 jobs:
   build:
@@ -34,6 +39,12 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 45
     steps:
+      - name: Source - this repository (the Farooq patches)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: fr
+          persist-credentials: false
+
       - name: Source - rustdesk-api (pinned)
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -57,6 +68,9 @@ jobs:
           echo "rustdesk-api     $(git -C api rev-parse HEAD)"
           echo "rustdesk-api-web $(git -C web rev-parse HEAD)"
           uname -m
+
+      - name: Farooq patches - Urdu + Arabic, right-to-left, the Naskh font
+        run: python3 fr/farooqremote/accounts/apply-patches.py api web
 
       - name: Set up Go
         uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
@@ -149,6 +163,7 @@ jobs:
           ldap:
             enable: false
           CONF
+          cp "$T/conf/config.yaml" "$RUNNER_TEMP/fr-config.yaml"
           cd "$T"
           PW="ci-$(openssl rand -hex 8)"
           # first run through the command line: creates the database + the admin, then sets a known password
@@ -168,8 +183,41 @@ jobs:
           c=$(curl -s -o right.json -w '%{http_code}' -H 'Content-Type: application/json' -d "{\"username\":\"admin\",\"password\":\"$PW\"}" http://127.0.0.1:21114/api/login)
           echo "right login -> $c"; test "$c" = 200; grep -q '"access_token"' right.json
           echo "login-options: $(curl -s http://127.0.0.1:21114/api/login-options)"
+          c=$(curl -s -o ur.json -w '%{http_code}' -H 'Accept-Language: ur' -H 'Content-Type: application/json' -d '{"username":"admin","password":"wrong-pass-2"}' http://127.0.0.1:21114/api/login)
+          echo "wrong login in Urdu -> $c $(cat ur.json)"; grep -q 'صارف نام یا پاس ورڈ غلط ہے' ur.json
+          c=$(curl -s -o ar.json -w '%{http_code}' -H 'Accept-Language: ar' -H 'Content-Type: application/json' -d '{"username":"admin","password":"wrong-pass-3"}' http://127.0.0.1:21114/api/login)
+          echo "wrong login in Arabic -> $c $(cat ar.json)"; grep -q 'اسم المستخدم أو كلمة المرور غير صحيحة' ar.json
           kill "$APID" || true
           echo "TEST PASSED"
+
+      - name: Pictures - the admin page in English, Urdu and Arabic (demo data)
+        working-directory: api
+        run: |
+          set -u
+          sudo apt-get install -y -q sqlite3 > /dev/null
+          T="$RUNNER_TEMP/fr-shots"
+          rm -rf "$T"; mkdir -p "$T/conf/admin" "$T/data" "$T/runtime" "$T/resources"
+          cp apimain "$T/"
+          cp -a resources/admin resources/i18n resources/public resources/templates resources/version "$T/resources/"
+          cp "$GITHUB_WORKSPACE/fr/farooqremote/accounts/hello.html" "$T/conf/admin/hello.html"
+          cp "$RUNNER_TEMP/fr-config.yaml" "$T/conf/config.yaml"
+          cd "$T"
+          PW="ci-$(openssl rand -hex 8)"
+          ./apimain -c ./conf/config.yaml reset-admin-pwd "$PW" > reset.out 2>&1
+          sqlite3 data/rustdeskapi.db < "$GITHUB_WORKSPACE/fr/farooqremote/accounts/ci/demo.sql"
+          ./apimain -c ./conf/config.yaml > run.out 2>&1 &
+          APID=$!
+          for i in $(seq 1 30); do sleep 1; curl -fs -o /dev/null http://127.0.0.1:21114/api/login-options && break; done
+          mkdir -p "$RUNNER_TEMP/pw" && cd "$RUNNER_TEMP/pw"
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund "playwright@$PLAYWRIGHT_VERSION" > /dev/null
+          npx playwright install --with-deps chromium > /dev/null
+          cp "$GITHUB_WORKSPACE/fr/farooqremote/accounts/ci/screens.mjs" .
+          BASE=http://127.0.0.1:21114/_admin/ FR_USER=admin FR_PASS="$PW" OUT="$GITHUB_WORKSPACE/screens" node screens.mjs
+          kill "$APID" || true
+          cd "$GITHUB_WORKSPACE"
+          ls -la screens
+          python3 -m zipfile -c "$SCREENS" screens/
 
       - name: Package
         run: |
@@ -178,12 +226,14 @@ jobs:
           cp api/apimain "$R/"
           cp -a api/resources/admin api/resources/i18n api/resources/public api/resources/templates api/resources/version "$R/resources/"
           cp api/conf/config.yaml "$R/conf/config.yaml.upstream"
+          cp fr/farooqremote/accounts/hello.html "$R/conf/admin/hello.html"
           cp api/LICENSE "$R/LICENSE-rustdesk-api.txt"
           cp web/LICENSE "$R/LICENSE-rustdesk-api-web.txt"
           {
             echo "Farooq Remote account server - lejianwen/rustdesk-api $API_VERSION for linux-arm64 (static, musl)"
             echo "rustdesk-api     https://github.com/$API_REPO commit $API_COMMIT (MIT)"
             echo "rustdesk-api-web https://github.com/$WEB_REPO commit $WEB_COMMIT (MIT)"
+            echo "Farooq patches: https://github.com/$GITHUB_REPOSITORY/tree/$GITHUB_SHA/farooqremote/accounts (Urdu + Arabic, right-to-left, FS Urdu = Noto Naskh Arabic, OFL)"
             echo "built by https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID on $(date -u +%FT%TZ), $(go version)"
             echo "settings are written on the server by fr-08-accounts.sh; conf/config.yaml.upstream is the original for reference"
           } > "$R/FAROOQ-BUILD.txt"
@@ -202,14 +252,16 @@ jobs:
             echo
             echo "- rustdesk-api: https://github.com/$API_REPO/commit/$API_COMMIT (MIT)"
             echo "- rustdesk-api-web: https://github.com/$WEB_REPO/commit/$WEB_COMMIT (MIT)"
+            echo "- Farooq patches: Urdu + Arabic (words, labels, server messages), right-to-left, the Naskh font FS Urdu (Noto Naskh Arabic, OFL) - farooqremote/accounts/ at $GITHUB_SHA"
+            echo "- Pictures of the admin page in English, Urdu and Arabic (demo data): \`$SCREENS\`"
             echo "- SHA256: \`$(cut -d' ' -f1 SHA256SUMS.txt)\`"
             echo
             echo "Installed by FR-08-ACCOUNTS.bat (FA-020 Phase 5). Not a RustDesk server release."
           } > notes.md
           if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
-            gh release upload "$RELEASE_TAG" "$ASSET" SHA256SUMS.txt --clobber --repo "$GITHUB_REPOSITORY"
+            gh release upload "$RELEASE_TAG" "$ASSET" SHA256SUMS.txt "$SCREENS" --clobber --repo "$GITHUB_REPOSITORY"
           else
-            gh release create "$RELEASE_TAG" "$ASSET" SHA256SUMS.txt --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            gh release create "$RELEASE_TAG" "$ASSET" SHA256SUMS.txt "$SCREENS" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
               --title "Farooq Remote accounts $API_VERSION (linux-arm64)" --notes-file notes.md --prerelease
           fi
           echo "release: https://github.com/$GITHUB_REPOSITORY/releases/tag/$RELEASE_TAG"

@@ -1,0 +1,613 @@
+{
+  "Login": {
+    "One": "لاگ ان"
+  },
+  "Logout": {
+    "One": "لاگ آؤٹ"
+  },
+  "Register": {
+    "One": "رجسٹر کریں"
+  },
+  "Confirm": {
+    "One": "تصدیق کریں"
+  },
+  "Username": {
+    "One": "صارف نام"
+  },
+  "Password": {
+    "One": "پاس ورڈ"
+  },
+  "LoginSuccess": {
+    "One": "لاگ ان ہو گیا"
+  },
+  "ForgotPassword": {
+    "One": "پاس ورڈ بھول گئے"
+  },
+  "ResetPassword": {
+    "One": "نیا پاس ورڈ مقرر کریں"
+  },
+  "ChangePassword": {
+    "One": "پاس ورڈ بدلیں"
+  },
+  "Userinfo": {
+    "One": "میری معلومات"
+  },
+  "ParamRequired": {
+    "One": "{param} ضروری ہے"
+  },
+  "HasBind": {
+    "One": "منسلک ہے"
+  },
+  "NoBind": {
+    "One": "منسلک نہیں"
+  },
+  "UnBind": {
+    "One": "علیحدہ کریں"
+  },
+  "ToBind": {
+    "One": "منسلک کریں"
+  },
+  "Confirm?": {
+    "One": "{param} — کیا آپ کو یقین ہے؟"
+  },
+  "Cancel": {
+    "One": "منسوخ"
+  },
+  "Platform": {
+    "One": "پلیٹ فارم"
+  },
+  "Status": {
+    "One": "حالت"
+  },
+  "Actions": {
+    "One": "کارروائیاں"
+  },
+  "Filter": {
+    "One": "فلٹر"
+  },
+  "Add": {
+    "One": "شامل کریں"
+  },
+  "Hostname": {
+    "One": "کمپیوٹر کا نام"
+  },
+  "Alias": {
+    "One": "عرفی نام"
+  },
+  "Hash": {
+    "One": "ہیش"
+  },
+  "Tags": {
+    "One": "ٹیگز"
+  },
+  "Edit": {
+    "One": "ترمیم"
+  },
+  "Delete": {
+    "One": "حذف کریں"
+  },
+  "Create": {
+    "One": "بنائیں"
+  },
+  "Update": {
+    "One": "اپ ڈیٹ کریں"
+  },
+  "LoginName": {
+    "One": "لاگ ان نام"
+  },
+  "Submit": {
+    "One": "جمع کریں"
+  },
+  "OperationSuccess": {
+    "One": "کام ہو گیا"
+  },
+  "Owner": {
+    "One": "مالک"
+  },
+  "Name": {
+    "One": "نام"
+  },
+  "Color": {
+    "One": "رنگ"
+  },
+  "CreatedAt": {
+    "One": "بنانے کا وقت"
+  },
+  "UpdatedAt": {
+    "One": "تبدیلی کا وقت"
+  },
+  "Memory": {
+    "One": "میموری"
+  },
+  "Os": {
+    "One": "آپریٹنگ سسٹم"
+  },
+  "Uuid": {
+    "One": "UUID"
+  },
+  "Version": {
+    "One": "ورژن"
+  },
+  "Type": {
+    "One": "قسم"
+  },
+  "Group": {
+    "One": "گروپ"
+  },
+  "CommonGroup": {
+    "One": "عام گروپ"
+  },
+  "CommonGroupNote": {
+    "One": "گروپ کے ارکان اور ان کی ڈیوائسز صرف ایڈمن دیکھ سکتے ہیں"
+  },
+  "SharedGroup": {
+    "One": "مشترکہ گروپ"
+  },
+  "SharedGroupNote": {
+    "One": "سب صارفین گروپ کے ارکان اور ان کی ڈیوائسز دیکھ سکتے ہیں"
+  },
+  "Nickname": {
+    "One": "دکھائی دینے والا نام"
+  },
+  "UserTags": {
+    "One": "صارف کے ٹیگز"
+  },
+  "UserAddressBook": {
+    "One": "صارف کی ایڈریس بک"
+  },
+  "IsAdmin": {
+    "One": "ایڈمن"
+  },
+  "PleaseInputNewPassword": {
+    "One": "براہِ کرم نیا پاس ورڈ لکھیں"
+  },
+  "AutoRegister": {
+    "One": "خود بخود اکاؤنٹ بنائیں"
+  },
+  "AutoRegisterNote": {
+    "One": "اگر یہ کھلا ہو تو جو صارف OAuth سے لاگ ان کرے اور کسی موجودہ اکاؤنٹ سے منسلک نہ ہو، اس کا اکاؤنٹ خود بخود بن جائے گا"
+  },
+  "ThirdName": {
+    "One": "بیرونی سروس کا نام"
+  },
+  "Close": {
+    "One": "بند کریں"
+  },
+  "OauthBinding": {
+    "One": "آپ اکاؤنٹ منسلک کرنے کی اجازت دے رہے ہیں"
+  },
+  "OauthLogining": {
+    "One": "آپ لاگ ان کی اجازت دے رہے ہیں"
+  },
+  "OauthCloseNote": {
+    "One": "اگر یہ اجازت آپ نے نہیں مانگی تو یہ صفحہ فوراً بند کر دیں"
+  },
+  "OperationSuccessAndCloseAfter3Seconds": {
+    "One": "کام ہو گیا، یہ صفحہ 3 سیکنڈ میں بند ہو جائے گا"
+  },
+  "ConfirmOauth": {
+    "One": "اجازت کی تصدیق کریں"
+  },
+  "Device": {
+    "One": "ڈیوائس"
+  },
+  "ChangeLang": {
+    "One": "زبان بدلیں"
+  },
+  "My": {
+    "One": "میرا اکاؤنٹ"
+  },
+  "Info": {
+    "One": "معلومات"
+  },
+  "AddressBooks": {
+    "One": "ایڈریس بکس"
+  },
+  "System": {
+    "One": "سسٹم"
+  },
+  "PeerManage": {
+    "One": "ڈیوائسز"
+  },
+  "AddressBookManage": {
+    "One": "ایڈریس بکس"
+  },
+  "GroupManage": {
+    "One": "گروپ"
+  },
+  "UserManage": {
+    "One": "صارفین"
+  },
+  "UserAdd": {
+    "One": "نیا صارف"
+  },
+  "UserEdit": {
+    "One": "صارف میں ترمیم"
+  },
+  "TagsManage": {
+    "One": "ٹیگز"
+  },
+  "OauthManage": {
+    "One": "OAuth"
+  },
+  "LoginLog": {
+    "One": "لاگ ان کا ریکارڈ"
+  },
+  "LastOnlineTime": {
+    "One": "آخری بار آن لائن"
+  },
+  "JustNow": {
+    "One": "ابھی ابھی"
+  },
+  "MinutesAgo": {
+    "One": "{param} منٹ پہلے",
+    "Other": "{param} منٹ پہلے"
+  },
+  "HoursAgo": {
+    "One": "{param} گھنٹہ پہلے",
+    "Other": "{param} گھنٹے پہلے"
+  },
+  "DaysAgo": {
+    "One": "{param} دن پہلے",
+    "Other": "{param} دن پہلے"
+  },
+  "MonthsAgo": {
+    "One": "{param} مہینہ پہلے",
+    "Other": "{param} مہینے پہلے"
+  },
+  "YearsAgo": {
+    "One": "{param} سال پہلے",
+    "Other": "{param} سال پہلے"
+  },
+  "MinutesLess": {
+    "One": "{param} منٹ سے کم",
+    "Other": "{param} منٹ سے کم"
+  },
+  "HoursLess": {
+    "One": "{param} گھنٹے سے کم",
+    "Other": "{param} گھنٹے سے کم"
+  },
+  "DaysLess": {
+    "One": "{param} دن سے کم",
+    "Other": "{param} دن سے کم"
+  },
+  "Export": {
+    "One": "برآمد کریں"
+  },
+  "AddToAddressBook": {
+    "One": "ایڈریس بک میں ڈالیں"
+  },
+  "BatchDelete": {
+    "One": "منتخب حذف کریں"
+  },
+  "PleaseSelectData": {
+    "One": "براہِ کرم پہلے کچھ منتخب کریں"
+  },
+  "PasswordType": {
+    "One": "پاس ورڈ کی قسم"
+  },
+  "OncePassword": {
+    "One": "ایک بار کا پاس ورڈ"
+  },
+  "FixedPassword": {
+    "One": "مستقل پاس ورڈ"
+  },
+  "FixedPasswordWarning": {
+    "One": "مستقل پاس ورڈ کسی کے ہاتھ لگ سکتا ہے، اس لیے احتیاط سے استعمال کریں؛ ایک بار کا پاس ورڈ بہتر ہے"
+  },
+  "ExpireTime": {
+    "One": "ختم ہونے کا وقت"
+  },
+  "ShareByWebClient": {
+    "One": "ویب ایپ سے شیئر کریں"
+  },
+  "Minutes": {
+    "One": "{param} منٹ",
+    "Other": "{param} منٹ"
+  },
+  "Hours": {
+    "One": "{param} گھنٹہ",
+    "Other": "{param} گھنٹے"
+  },
+  "Days": {
+    "One": "{param} دن",
+    "Other": "{param} دن"
+  },
+  "Weeks": {
+    "One": "{param} ہفتہ",
+    "Other": "{param} ہفتے"
+  },
+  "Months": {
+    "One": "{param} مہینہ",
+    "Other": "{param} مہینے"
+  },
+  "Forever": {
+    "One": "ہمیشہ کے لیے"
+  },
+  "Error": {
+    "One": "خرابی"
+  },
+  "IDNotExist": {
+    "One": "یہ ID موجود نہیں"
+  },
+  "RemoteDesktopOffline": {
+    "One": "دوسرا کمپیوٹر آف لائن ہے"
+  },
+  "KeyMismatch": {
+    "One": "کلید میل نہیں کھاتی"
+  },
+  "KeyOveruse": {
+    "One": "کلید حد سے زیادہ استعمال ہوئی"
+  },
+  "Link": {
+    "One": "لنک"
+  },
+  "CopySuccess": {
+    "One": "کاپی ہو گیا"
+  },
+  "CopyFailed": {
+    "One": "کاپی نہیں ہو سکا"
+  },
+  "Timeout": {
+    "One": "وقت ختم ہو گیا"
+  },
+  "AuditConnLog": {
+    "One": "کنکشن کا ریکارڈ"
+  },
+  "Peer": {
+    "One": "ڈیوائس",
+    "Other": "ڈیوائسز"
+  },
+  "FromPeer": {
+    "One": "کس ڈیوائس سے"
+  },
+  "FromName": {
+    "One": "کس نام سے"
+  },
+  "CloseTime": {
+    "One": "بند ہونے کا وقت"
+  },
+  "AuditFileLog": {
+    "One": "فائلوں کا ریکارڈ"
+  },
+  "Common": {
+    "One": "عام"
+  },
+  "File": {
+    "One": "فائل"
+  },
+  "Num": {
+    "One": "تعداد"
+  },
+  "Ip": {
+    "One": "IP"
+  },
+  "FileName": {
+    "One": "فائل کا نام"
+  },
+  "FileInfo": {
+    "One": "فائل کی معلومات"
+  },
+  "Path": {
+    "One": "راستہ"
+  },
+  "IndexNum": {
+    "One": "نمبر"
+  },
+  "ToRemote": {
+    "One": "دوسرے کمپیوٹر کی طرف"
+  },
+  "ToLocal": {
+    "One": "اپنے کمپیوٹر کی طرف"
+  },
+  "AddressBookName": {
+    "One": "ایڈریس بک کا نام"
+  },
+  "AddressBookCollection": {
+    "One": "ایڈریس بک کا مجموعہ"
+  },
+  "AddRule": {
+    "One": "اصول شامل کریں"
+  },
+  "ShareRules": {
+    "One": "شیئر کرنے کے اصول"
+  },
+  "Rule": {
+    "One": "اصول"
+  },
+  "Read": {
+    "One": "صرف دیکھنا"
+  },
+  "ReadWrite": {
+    "One": "دیکھنا اور بدلنا"
+  },
+  "FullControl": {
+    "One": "مکمل کنٹرول"
+  },
+  "ShareTo": {
+    "One": "کس کے ساتھ شیئر کریں"
+  },
+  "MyAddressBook": {
+    "One": "میری ایڈریس بک"
+  },
+  "AddressBook": {
+    "One": "ایڈریس بک"
+  },
+  "AddressBookNameManage": {
+    "One": "ایڈریس بکس کے نام"
+  },
+  "MyAddressBookTips": {
+    "One": "«میری ایڈریس بک» سسٹم کی اپنی ہے، اسے بدلا یا حذف نہیں کیا جا سکتا"
+  },
+  "LastOnlineIp": {
+    "One": "آخری IP"
+  },
+  "or login in with": {
+    "One": "یا ان سے لاگ ان کریں"
+  },
+  "Optional, default is": {
+    "One": "اختیاری، پہلے سے مقرر:"
+  },
+  "Check your IdP docs, without": {
+    "One": "اپنی IdP کی ہدایات دیکھیں، اس کے بغیر:"
+  },
+  "For OIDC login without a password, enter any 4-20 letters": {
+    "One": "اگر آپ OIDC سے بغیر پاس ورڈ لاگ ان کرتے ہیں تو کوئی بھی 4 سے 20 حروف لکھ دیں"
+  },
+  "OldPassword": {
+    "One": "پرانا پاس ورڈ"
+  },
+  "NewPassword": {
+    "One": "نیا پاس ورڈ"
+  },
+  "NewPasswordEqualOldPassword": {
+    "One": "نیا پاس ورڈ پرانے جیسا نہیں ہو سکتا"
+  },
+  "ConfirmPassword": {
+    "One": "پاس ورڈ دوبارہ لکھیں"
+  },
+  "PasswordNotMatchConfirmPassword": {
+    "One": "دونوں پاس ورڈ ایک جیسے نہیں"
+  },
+  "ToLogin": {
+    "One": "لاگ ان پر جائیں"
+  },
+  "UserToken": {
+    "One": "صارف ٹوکن"
+  },
+  "Email": {
+    "One": "ای میل"
+  },
+  "MyPeer": {
+    "One": "میری ڈیوائسز"
+  },
+  "View": {
+    "One": "دیکھیں"
+  },
+  "Information": {
+    "One": "معلومات"
+  },
+  "BatchAddToAB": {
+    "One": "منتخب کو ایڈریس بک میں ڈالیں"
+  },
+  "BatchEditTags": {
+    "One": "منتخب کے ٹیگز بدلیں"
+  },
+  "User": {
+    "One": "صارف"
+  },
+  "ShareRecord": {
+    "One": "شیئر کا ریکارڈ"
+  },
+  "Second": {
+    "One": "سیکنڈ"
+  },
+  "Captcha": {
+    "One": "تصویری کوڈ"
+  },
+  "ServerCmd": {
+    "One": "سرور کمانڈ"
+  },
+  "Simple": {
+    "One": "سادہ"
+  },
+  "Advanced": {
+    "One": "تفصیلی"
+  },
+  "Available": {
+    "One": "دستیاب"
+  },
+  "NotAvailable": {
+    "One": "دستیاب نہیں"
+  },
+  "ServerCmdTips": {
+    "One": "یہ سہولت ابھی آزمائشی ہے۔ یقینی بنائیں کہ API اور hbbs / hbbr ایک ہی لوپ بیک پتے پر ہوں۔ مزید معلومات: {wiki}"
+  },
+  "Refresh": {
+    "One": "تازہ کریں"
+  },
+  "Save": {
+    "One": "محفوظ کریں"
+  },
+  "SendCustom": {
+    "One": "اپنی کمانڈ بھیجیں"
+  },
+  "Send": {
+    "One": "بھیجیں"
+  },
+  "SendCmd": {
+    "One": "کمانڈ بھیجیں"
+  },
+  "Result": {
+    "One": "نتیجہ"
+  },
+  "DeviceGroupManage": {
+    "One": "ڈیوائس گروپ"
+  },
+  "Import": {
+    "One": "درآمد کریں"
+  },
+  "Drop file here or click to upload": {
+    "One": "فائل یہاں چھوڑیں یا اپ لوڈ کے لیے کلک کریں"
+  },
+  "Please upload csv file": {
+    "One": "براہِ کرم CSV فائل اپ لوڈ کریں"
+  },
+  "Columns": {
+    "One": "کالم"
+  },
+  "You can reference export file": {
+    "One": "نمونے کے لیے برآمد کی ہوئی فائل دیکھیں"
+  },
+  "Remark": {
+    "One": "نوٹ"
+  },
+  "Token": {
+    "One": "ٹوکن"
+  },
+  "Bind": {
+    "One": "منسلک کریں"
+  },
+  "ID": {
+    "One": "ID"
+  },
+  "Id": {
+    "One": "ID"
+  },
+  "IdP": {
+    "One": "IdP"
+  },
+  "InvalidParam": {
+    "One": "غلط معلومات"
+  },
+  "More": {
+    "One": "مزید"
+  },
+  "Op": {
+    "One": "فراہم کنندہ"
+  },
+  "PkceEnable": {
+    "One": "PKCE کھلا"
+  },
+  "PkceMethod": {
+    "One": "PKCE کا طریقہ"
+  },
+  "Size": {
+    "One": "سائز"
+  },
+  "Success": {
+    "One": "کامیاب"
+  },
+  "Your IdP Name": {
+    "One": "آپ کی IdP کا نام"
+  },
+  "OauthBind": {
+    "One": "OAuth منسلک کرنا"
+  },
+  "OauthLogin": {
+    "One": "OAuth لاگ ان"
+  },
+  "首页": {
+    "One": "پہلا صفحہ"
+  }
+}

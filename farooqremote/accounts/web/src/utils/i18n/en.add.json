@@ -1,0 +1,80 @@
+{
+  "AddressBookCollection": {
+    "One": "Address Book Collection"
+  },
+  "or login in with": {
+    "One": "or log in with"
+  },
+  "Optional, default is": {
+    "One": "Optional, default is"
+  },
+  "Check your IdP docs, without": {
+    "One": "Check your IdP docs, without"
+  },
+  "For OIDC login without a password, enter any 4-20 letters": {
+    "One": "For OIDC login without a password, enter any 4-20 letters"
+  },
+  "Email": {
+    "One": "Email"
+  },
+  "MyPeer": {
+    "One": "My Devices"
+  },
+  "View": {
+    "One": "View"
+  },
+  "Information": {
+    "One": "Information"
+  },
+  "Import": {
+    "One": "Import"
+  },
+  "Token": {
+    "One": "Token"
+  },
+  "Bind": {
+    "One": "Bind"
+  },
+  "ID": {
+    "One": "ID"
+  },
+  "Id": {
+    "One": "ID"
+  },
+  "IdP": {
+    "One": "IdP"
+  },
+  "InvalidParam": {
+    "One": "Invalid value"
+  },
+  "More": {
+    "One": "More"
+  },
+  "Op": {
+    "One": "Provider"
+  },
+  "PkceEnable": {
+    "One": "PKCE on"
+  },
+  "PkceMethod": {
+    "One": "PKCE method"
+  },
+  "Size": {
+    "One": "Size"
+  },
+  "Success": {
+    "One": "Success"
+  },
+  "Your IdP Name": {
+    "One": "Your IdP Name"
+  },
+  "OauthBind": {
+    "One": "OAuth Bind"
+  },
+  "OauthLogin": {
+    "One": "OAuth Login"
+  },
+  "首页": {
+    "One": "Home"
+  }
+}
