@@ -23,6 +23,8 @@ name: Farooq Remote - account server (linux-arm64)
 # 2.7-8: the company logo made on a white canvas, as WebP (2.7-7's logo had a black frame from a crop past its edges).
 # 2.7-9: «easy access» like TeamViewer's (lib/freasy, controller api/farooq_easy.go): one-time tickets for the owner's own
 # computers that allow it; tested by ci/easy_test.py after a fresh start.
+# 2.7-10: easy access after a security review: the target's key travels with the ticket, only a computer signed in to
+# the same account gets one, every ticket request counts in the limit, caps on the memory tables.
 #
 # Runs when this file or farooqremote/accounts/ is pushed to farooq/develop (or from the Actions tab). master stays the
 # upstream mirror. No secrets are used - only this run's own GITHUB_TOKEN, to publish the release.
@@ -44,9 +46,9 @@ env:
   WEB_COMMIT: 3998c2a9213fcd047252776d0f0db33e6717026c   # master when v2.7 was released (31 Aug 2025)
   GO_VERSION: "1.23.10"                                    # the toolchain line of rustdesk-api go.mod
   NODE_VERSION: "20"                                       # as upstream build.yml
-  RELEASE_TAG: accounts-2.7-9
-  ASSET: farooqremote-accounts-2.7-9-linux-arm64.tar.gz
-  SCREENS: farooqremote-accounts-2.7-9-screens.zip
+  RELEASE_TAG: accounts-2.7-10
+  ASSET: farooqremote-accounts-2.7-10-linux-arm64.tar.gz
+  SCREENS: farooqremote-accounts-2.7-10-screens.zip
   PLAYWRIGHT_VERSION: "1.49.1"
 
 jobs:
@@ -116,7 +118,7 @@ jobs:
           sudo apt-get install -y -q musl-tools
           go version
           go mod tidy
-          go test ./lib/frsignup/ ./lib/freasy/
+          go test -v ./lib/frsignup/ ./lib/freasy/
           go test -v -run TestFrDrawDigits ./utils/
           echo "$API_VERSION" > resources/version
           CC=musl-gcc CGO_ENABLED=1 CGO_LDFLAGS="-static" go build -trimpath -ldflags "-s -w" -o apimain ./cmd/apimain.go
@@ -210,7 +212,7 @@ jobs:
           echo "server log lines of the sign-up:"; grep -a "FR " runtime/log.txt | tail -20 || true
           kill "$APID" || true
           wait "$APID" 2>/dev/null || true
-          # easy access (2.7-9): a fresh start (the sign-up test ends with this address stopped by the limiter)
+          # easy access (2.7-9, 2.7-10): a fresh start (the sign-up test ends with this address stopped by the limiter)
           ./apimain -c ./conf/config.yaml > run2.out 2>&1 &
           APID=$!
           for i in $(seq 1 30); do sleep 1; curl -fs -o /dev/null http://127.0.0.1:21114/api/login-options && break; done

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Farooq Remote (FA-020): the build's own test of «easy access» (lib/freasy, http/controller/api/farooq_easy.go).
+2.7-10: the target's key travels with the ticket, only a computer signed in to the same account gets one.
 
 Run by .github/workflows/farooq-accounts.yml after signup_test.py, against a freshly restarted test server (the sign-up
 test ends with this network address stopped by the limiter):
@@ -44,8 +45,10 @@ def ok(cond, msg, extra=''):
 A = ('111111111', 'ci-easy-a')   # the computer to be reached (admin's)
 B = ('222222222', 'ci-easy-b')   # admin's other computer
 C = ('333333333', 'ci-easy-c')   # the second user's computer
+D = ('444444444', 'ci-easy-d')   # a computer nobody is signed in on
+PK_A = 'MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY='   # «A's key» as the app sends it (base64 of 32 bytes)
 
-for pid, uuid in (A, B, C):
+for pid, uuid in (A, B, C, D):
     s, d = call('POST', '/api/sysinfo', {'id': pid, 'uuid': uuid, 'hostname': 'ci-' + pid, 'os': 'linux', 'cpu': 'ci',
                                           'memory': '1GB', 'username': 'ci', 'version': '1.4.9'})
     ok(s == 200, f'computer {pid} recorded', d)
@@ -68,8 +71,8 @@ def heartbeat(dev, easy, uuid=None):
     ok(s == 200, f'heartbeat of {dev[0]} (fr_easy={easy})', d)
 
 
-def ticket(token, target, frm):
-    return call('POST', '/api/fr/easy/ticket', {'id': target[0], 'from': frm[0]}, token=token)
+def ticket(token, target, frm, pk=PK_A):
+    return call('POST', '/api/fr/easy/ticket', {'id': target[0], 'from': frm[0], 'pk': pk}, token=token)
 
 
 def check(t, dev_id):
@@ -101,13 +104,24 @@ ok(d.get('ok') is False, 'ticket refused by another computer', d)
 s, d = check(t1, A[0])
 ok(d.get('ok') is False, 'a ticket tried once cannot be used again', d)
 
-# 6. the right computer gets the account and the asking computer, once
+# 6. the right computer gets the account, the asking computer and the key of the session, once
 s, d = ticket(tok_b, A, B)
 t2 = d.get('ticket', '')
 s, d = check(t2, A[0])
-ok(d.get('ok') is True and d.get('user') == 'admin' and d.get('from') == B[0], 'the computer learns the account and the caller', d)
+ok(d.get('ok') is True and d.get('user') == 'admin' and d.get('from') == B[0] and d.get('pk') == PK_A,
+   'the computer learns the account, the caller and the key', d)
 s, d = check(t2, A[0])
 ok(d.get('ok') is False, 'a used ticket is refused', d)
+
+# 6b. no ticket without a proper key of the computer being reached
+for bad in ('', 'abc', PK_A[:-1], 'MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZQ=='):
+    s, d = ticket(tok_b, A, B, pk=bad)
+    ok(d.get('easy') is False, f'no ticket with a bad key ({bad!r})', d)
+
+# 6c. a computer nobody is signed in on gets no ticket, even with easy access said
+heartbeat(D, True)
+s, d = ticket(tok_b, D, B)
+ok(d.get('easy') is False, 'no ticket for a computer not signed in to the account', d)
 
 # 7. another account gets no ticket for a computer bound to the owner
 s, d = ticket(tok_c, A, C)
@@ -127,5 +141,15 @@ s, d = check('zz', A[0])
 ok(d.get('ok') is False, 'a malformed ticket is refused', d)
 s, d = call('POST', '/api/fr/easy/check', raw_body=b'{not json')
 ok(s == 400, 'malformed request refused', (s, d))
+
+# 11. logging out on the computer ends easy access to it (it is no longer signed in to the account)
+heartbeat(A, True)
+s, d = ticket(tok_b, A, B)
+ok(d.get('easy') is True, 'ticket again while A is signed in', d)
+check(d.get('ticket', ''), A[0])
+s, d = call('POST', '/api/logout', {}, token=tok_a)
+ok(s == 200, 'admin logged out on A', (s, d))
+s, d = ticket(tok_b, A, B)
+ok(d.get('easy') is False, 'no ticket after logging out on the computer', d)
 
 print('EASY ACCESS TEST PASSED')

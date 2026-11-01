@@ -112,3 +112,22 @@ without a password, everybody else still needs one.
   So a stranger needs the owner's signed-in account (as with TeamViewer — a strong account password matters).
 - Tested by `lib/freasy/freasy_test.go` and `ci/easy_test.py` (signed-in only, uuid check, one use, other computer,
   other account, switched off, rubbish).
+
+## 2.7-10 — easy access after a security review (1 Nov 2026)
+
+A review of 2.7-9 and app 1.1.5 (before either was given to anyone) found ways around easy access. Server side:
+
+- `POST /api/fr/easy/ticket` now takes `"pk"`: the key of the computer being reached, as the app checked it through the
+  ID server on an end-to-end encrypted connection (standard base64 of 32 bytes; anything else → no ticket). The ticket
+  keeps it, and `POST /api/fr/easy/check` returns it; the computer accepts the ticket only when it is its own key, so a
+  ticket can not be carried to another session.
+- A ticket only for a computer **signed in to the same account** (`peers.user_id` = the asking account; logging out on
+  that computer unbinds it, so easy access to it stops until the next login there). 2.7-9 also allowed unbound computers.
+- Every ticket request counts in the limit (60 per account per 10 minutes), given or not, with one answer
+  (`{"easy": false}`) for every refusal.
+- Caps on the memory tables (20,000 computers, 20,000 waiting tickets) and a clean-up at least once a minute.
+- App side (1.1.6): strict https for both calls (no «accept any certificate», no detour through the ID server), tickets
+  only on encrypted connections and once per connection, wrong tickets counted like wrong passwords, heartbeat
+  «strategy» ignored.
+- Tested by `lib/freasy/freasy_test.go` (key rules, caps, every request counted) and `ci/easy_test.py` (+ the key comes
+  back with the check, bad keys refused, a computer nobody is signed in on refused, logging out on the computer ends it).
