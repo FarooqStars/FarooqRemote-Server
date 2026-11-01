@@ -148,5 +148,11 @@
   },
   "FrPrivacyLink": {
     "One": "Privacy"
+  },
+  "FrCaptchaLabel": {
+    "One": "Picture code — type the 4 digits"
+  },
+  "FrNewPicture": {
+    "One": "Another picture"
   }
 }

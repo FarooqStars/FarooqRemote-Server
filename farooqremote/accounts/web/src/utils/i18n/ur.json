@@ -681,5 +681,11 @@
   },
   "FrPrivacyLink": {
     "One": "رازداری"
+  },
+  "FrCaptchaLabel": {
+    "One": "تصویری کوڈ — 4 ہندسے لکھیں"
+  },
+  "FrNewPicture": {
+    "One": "دوسری تصویر"
   }
 }

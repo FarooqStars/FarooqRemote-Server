@@ -12,6 +12,8 @@ name: Farooq Remote - account server (linux-arm64)
 # (lib/frsignup, http/controller/admin/farooq_signup.go, web register/index.vue + register/forgot.vue); the app login
 # accepts the address (up to 100 letters, any case); wrong picture or e-mail codes count for upstream's ban limiter.
 # The test runs the whole sign-up with mails written to files (ci/signup_test.py); no mail leaves the runner.
+# 2.7-4 (owner 1 Nov 2026, «Captcha code very hard to read»): the picture code is 4 clear digits in one plain font, bigger,
+# shown above its box with its own «Another picture» link.
 #
 # Runs when this file or farooqremote/accounts/ is pushed to farooq/develop (or from the Actions tab). master stays the
 # upstream mirror. No secrets are used - only this run's own GITHUB_TOKEN, to publish the release.
@@ -33,9 +35,9 @@ env:
   WEB_COMMIT: 3998c2a9213fcd047252776d0f0db33e6717026c   # master when v2.7 was released (31 Aug 2025)
   GO_VERSION: "1.23.10"                                    # the toolchain line of rustdesk-api go.mod
   NODE_VERSION: "20"                                       # as upstream build.yml
-  RELEASE_TAG: accounts-2.7-3
-  ASSET: farooqremote-accounts-2.7-3-linux-arm64.tar.gz
-  SCREENS: farooqremote-accounts-2.7-3-screens.zip
+  RELEASE_TAG: accounts-2.7-4
+  ASSET: farooqremote-accounts-2.7-4-linux-arm64.tar.gz
+  SCREENS: farooqremote-accounts-2.7-4-screens.zip
   PLAYWRIGHT_VERSION: "1.49.1"
 
 jobs:

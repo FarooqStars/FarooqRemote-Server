@@ -7,7 +7,7 @@ stays untouched and the build fails if a patch no longer matches.
 
 | File | What |
 |---|---|
-| `apply-patches.py` | Run by the build after the checkouts. Exact, match-once replacements in 12 upstream files, English words appended to `en.json` / `en.toml`, and the new files below copied in (the upstream `views/register/index.vue` is replaced). |
+| `apply-patches.py` | Run by the build after the checkouts. Exact, match-once replacements in 13 upstream files, English words appended to `en.json` / `en.toml`, and the new files below copied in (the upstream `views/register/index.vue` is replaced). |
 | `web/src/utils/i18n/ur.json`, `ar.json` | The admin page in Urdu and Arabic (all 201 words). `en.add.json`: English words upstream lacks (added only where missing). |
 | `web/src/utils/el-locale-ur.js`, `el-locale-ar.js` | element-plus 2.8.2 labels (tables, pages, dates, dialogs) in Urdu and Arabic. |
 | `web/src/styles/farooq.scss` | Right-to-left layout for Urdu / Arabic and the Naskh font **FS Urdu** (first in every language; used only for Arabic-script letters). |
@@ -44,3 +44,11 @@ password is typed there by the owner and is never stored in this repository):
 `FR_SMTP_HOST`, `FR_SMTP_PORT` (465 TLS / 587 STARTTLS), `FR_SMTP_USER`, `FR_SMTP_PASS`, `FR_MAIL_FROM`,
 `FR_MAIL_FROM_NAME`, `FR_SITE`. Without them sign-up stays closed and the pages say so. `FR_MAIL_TEST_DIR` is for the
 build's test only.
+
+## 2.7-4 — a picture code people can read (owner 1 Nov 2026)
+
+«Captcha code very hard to read i tried reset refresh 10 time» — upstream draws 4 letters/digits in decorative fonts
+with crossing lines at 150×50. `utils/captcha.go` now draws **4 digits 2–9** (no 0/O or 1/l mix-up) in one plain font
+(wqy-microhei) at 200×64 with only a thin wave line; the sign-up and forgot-password pages show it full size above its
+box, with an «Another picture» link and a number keypad on phones. The admin login's picture code (after 3 wrong
+passwords) uses the same drawing. The e-mail code and the limits stay the real protection.

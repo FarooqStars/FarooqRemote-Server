@@ -681,5 +681,11 @@
   },
   "FrPrivacyLink": {
     "One": "الخصوصية"
+  },
+  "FrCaptchaLabel": {
+    "One": "رمز الصورة — اكتب الأرقام الأربعة"
+  },
+  "FrNewPicture": {
+    "One": "صورة أخرى"
   }
 }

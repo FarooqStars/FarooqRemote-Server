@@ -14,12 +14,13 @@
           <el-input v-model="form.email" type="email" autocomplete="email" dir="ltr" class="login-input"
                     @keyup.enter="sendCode"/>
         </el-form-item>
-        <el-form-item :label="T('Captcha')">
-          <el-input v-model="form.captcha" dir="ltr" class="login-input captcha-input" @keyup.enter="sendCode">
-            <template #append>
-              <img v-if="cap.b64" :src="cap.b64" @click="loadCaptcha" class="captcha" alt="captcha"/>
-            </template>
-          </el-input>
+        <el-form-item :label="T('FrCaptchaLabel')">
+          <div class="fr-cap">
+            <img v-if="cap.b64" :src="cap.b64" @click="loadCaptcha" class="fr-cap-img" alt="captcha"/>
+            <a class="fr-link" @click="loadCaptcha">{{ T('FrNewPicture') }}</a>
+          </div>
+          <el-input v-model="form.captcha" dir="ltr" inputmode="numeric" maxlength="4" autocomplete="off"
+                    class="login-input fr-code" @keyup.enter="sendCode"/>
         </el-form-item>
         <el-button type="primary" class="login-button" :loading="busy" @click="sendCode">{{ T('FrSendCode') }}</el-button>
       </el-form>
@@ -234,10 +235,22 @@
   margin-top: 10px;
 }
 
-.captcha {
-  height: 30px;
+.fr-cap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.fr-cap-img {
+  width: 200px;
+  height: 64px;
+  border-radius: 6px;
   cursor: pointer;
   display: block;
+  background: #fff;
 }
 
 .el-form-item {
