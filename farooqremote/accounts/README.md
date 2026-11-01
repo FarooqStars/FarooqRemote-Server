@@ -22,7 +22,7 @@ stays untouched and the build fails if a patch no longer matches.
 | `ci/signup_test.py` | 2.7-3: the build runs the whole sign-up / forgot-password flow with mails written to files. |
 | `api/utils/farooq_captcha.go` (+ `_test.go`) | 2.7-5: our own drawing of the picture code (see below). |
 | `web/src/assets/logo.png`, `web/public/favicon.ico` | 2.7-6: Farooq Remote's own icon (the app's icon from the owner's branding files) as the logo and the browser-tab icon. |
-| `web/public/company-logo.png`, `hello.html`, `api/lib/frsignup/mail-icon.png` | 2.7-7: the company logo in the welcome box; the app icon inside the sign-up / password mails. |
+| `web/public/company-logo.webp`, `hello.html`, `api/lib/frsignup/mail-icon.png` | 2.7-7/2.7-8: the company logo in the welcome box; the app icon inside the sign-up / password mails. |
 
 Upstream changes made by `apply-patches.py`: Arabic + Urdu in the language list; a browser language such as en-US,
 ur-PK or ar-QA opens its own language (upstream showed raw keys for en-US); `dir="rtl"` + `lang` on `<html>`; a missing
@@ -85,3 +85,10 @@ the welcome text in every language (`hello.html`). The sign-up, password and «a
 app icon inside the mail (`mail-icon.png`, 96 px, `Content-ID: <frlogo@farooqmughal.net>`, multipart/related), shown 40 px
 before «Farooq Remote», so it shows even where a mail program blocks pictures from the web; `frsignup_test.go` checks it.
 `ci/screens.mjs` removes passing message boxes («Login success», «We sent the code») before each picture.
+
+## 2.7-8 — the company logo without a black frame
+
+2.7-7's build pictures showed a black frame around the company logo: the margin around the logo had been cut past the
+edges of the owner's picture, which the image library fills with black. The plate is now made on a white canvas and saved
+as `web/public/company-logo.webp` (WebP with real transparency, 8 KB — the same file as on the farooqmughal.net pages);
+`hello.html` points to it. 2.7-7 was built but never installed.
