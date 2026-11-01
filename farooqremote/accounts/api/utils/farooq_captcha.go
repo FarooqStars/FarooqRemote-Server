@@ -27,6 +27,7 @@ const (
 	frCapW    = 400  // pixels; shown at half size
 	frCapH    = 128  //
 	frCapSize = 92.0 // digit size in pixels (72 dpi)
+	frCapLift = 33   // baseline below the middle = about 0.36 of the size, so the digits sit in the middle
 )
 
 var (
@@ -96,7 +97,7 @@ func FrDrawDigits(content string) (string, error) {
 	for i, r := range runes {
 		w := f.HMetric(scale, f.Index(r)).AdvanceWidth.Round() + 3
 		x := slot*i + (slot-w)/2 + rand.Intn(17) - 8
-		y := frCapH/2 + int(frCapSize*0.36) + rand.Intn(17) - 8
+		y := frCapH/2 + frCapLift + rand.Intn(17) - 8
 		c.SetSrc(image.NewUniform(frCapColors[rand.Intn(len(frCapColors))]))
 		for ox := 0; ox < 4; ox++ { // a little bold: the same digit four times, one pixel apart
 			if _, err := c.DrawString(string(r), freetype.Pt(x+ox, y)); err != nil {
