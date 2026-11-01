@@ -188,14 +188,4 @@ replace_once(p, "\tu := &model.User{}\n\tDB.Where(\"username = ?\", username).Fi
              "\t}\n"
              "\tif u.Id == 0 {\n\t\treturn u\n\t}\n\tok, newHash, err := utils.VerifyPassword(u.Password, password)\n")
 
-# 11. server: the app's login also stops a network address after too many wrong passwords (upstream only counted them)
-p = os.path.join(API, 'http/controller/api/login.go')
-replace_once(p, "\tloginLimiter := global.LoginLimiter\n\tclientIp := c.ClientIP()\n\n\tf := &api.LoginForm{}\n",
-             "\tloginLimiter := global.LoginLimiter\n\tclientIp := c.ClientIP()\n"
-             "\t// Farooq Remote: the same ban as the admin login (ban-threshold wrong passwords in 10 minutes -> 30 minutes)\n"
-             "\tif banned, _ := loginLimiter.CheckSecurityStatus(clientIp); banned {\n"
-             "\t\tresponse.Error(c, response.TranslateMsg(c, \"LoginBanned\"))\n"
-             "\t\treturn\n"
-             "\t}\n\n\tf := &api.LoginForm{}\n")
-
 print('== done')

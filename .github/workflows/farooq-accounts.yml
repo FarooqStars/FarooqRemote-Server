@@ -10,7 +10,7 @@ name: Farooq Remote - account server (linux-arm64)
 # 2.7-3 (owner 1 Nov 2026, «make system from app user can Register this App by Email id and password»): anyone can make
 # an account with an e-mail address + password, proved by a 6-digit e-mail code, and «forgot password» by e-mail code
 # (lib/frsignup, http/controller/admin/farooq_signup.go, web register/index.vue + register/forgot.vue); the app login
-# accepts the address (up to 100 letters, any case) and stops a network address after too many wrong passwords.
+# accepts the address (up to 100 letters, any case); wrong picture or e-mail codes count for upstream's ban limiter.
 # The test runs the whole sign-up with mails written to files (ci/signup_test.py); no mail leaves the runner.
 #
 # Runs when this file or farooqremote/accounts/ is pushed to farooq/develop (or from the Actions tab). master stays the

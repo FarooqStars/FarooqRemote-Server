@@ -7,7 +7,7 @@ stays untouched and the build fails if a patch no longer matches.
 
 | File | What |
 |---|---|
-| `apply-patches.py` | Run by the build after the checkouts. Exact, match-once replacements in 13 upstream files, English words appended to `en.json` / `en.toml`, and the new files below copied in (the upstream `views/register/index.vue` is replaced). |
+| `apply-patches.py` | Run by the build after the checkouts. Exact, match-once replacements in 12 upstream files, English words appended to `en.json` / `en.toml`, and the new files below copied in (the upstream `views/register/index.vue` is replaced). |
 | `web/src/utils/i18n/ur.json`, `ar.json` | The admin page in Urdu and Arabic (all 201 words). `en.add.json`: English words upstream lacks (added only where missing). |
 | `web/src/utils/el-locale-ur.js`, `el-locale-ar.js` | element-plus 2.8.2 labels (tables, pages, dates, dialogs) in Urdu and Arabic. |
 | `web/src/styles/farooq.scss` | Right-to-left layout for Urdu / Arabic and the Naskh font **FS Urdu** (first in every language; used only for Arabic-script letters). |
@@ -35,8 +35,9 @@ in lower case); a second sign-up for the same address makes no second account �
 New users join the default group (they see only their own devices; the administrator sees all).
 
 Upstream changes for it: the `/forgot` route (open without login), the two links and «E-mail or user name» on the
-login page, the open `/api/admin/fr/…` routes, the app's login accepts up to 100 letters and any case, and the app's
-login now stops a network address after `ban-threshold` wrong passwords (upstream only counted them).
+login page, the open `/api/admin/fr/…` routes, and the app's login accepts up to 100 letters and any case. Wrong
+picture codes and wrong e-mail codes count as failed tries, so upstream's own limiter (`ban-threshold` failures in 10
+minutes → that network address waits 30 minutes, code 423 on every route) covers the sign-up pages too.
 
 Mail settings come from the server's environment (systemd `EnvironmentFile`, written by FR-11 on the VM — the mailbox
 password is typed there by the owner and is never stored in this repository):

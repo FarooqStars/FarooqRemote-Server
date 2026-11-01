@@ -158,15 +158,18 @@ for root, _, files in os.walk(os.environ.get('FR_ADMIN_DIR', 'resources/admin'))
             found += [w for w in ('/fr/signup/code', '/fr/password/reset') if w in t]
 ok('/fr/signup/code' in found and '/fr/password/reset' in found, 'admin page has the sign-up + forgot-password calls', found)
 
-# 14. the app login now stops a network address after too many wrong passwords (counts the wrong tries above too)
+# 14. too many wrong passwords stop the network address on every route (upstream's own limiter, code 423); the wrong
+#     picture codes and e-mail codes above count too
 banned = False
 for i in range(15):
     s, d = app_login('admin', f'wrong-pass-{i}')
-    if 'Too many wrong tries' in json.dumps(d):
+    if d.get('code') == 423:
         banned = True
         break
-ok(banned, f'app login stopped after wrong passwords (after {i + 1} more)', d)
+ok(banned, f'network address stopped after wrong passwords (after {i + 1} more)', d)
 s, d = app_login('admin', ADMIN_PW)
-ok(s != 200 and 'Too many wrong tries' in json.dumps(d), 'even the right password waits while the address is stopped', d)
+ok(d.get('code') == 423, 'even the right password waits while the address is stopped', d)
+s, d = call('GET', '/api/admin/fr/captcha')
+ok(d.get('code') == 423, 'the sign-up pages wait too', d)
 
 print('SIGN-UP TEST PASSED')
