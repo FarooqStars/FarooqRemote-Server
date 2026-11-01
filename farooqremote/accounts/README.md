@@ -20,6 +20,7 @@ stays untouched and the build fails if a patch no longer matches.
 | `web/src/views/register/index.vue`, `forgot.vue`, `web/src/api/farooq.js` | 2.7-3: the sign-up page (e-mail + picture code → code + password) and the forgot-password page; links on the login page. |
 | `api-add/en.add.toml` | 2.7-3: English server messages upstream lacks (sign-up, `LoginBanned`, `UserDisabled`), appended to `en.toml`. |
 | `ci/signup_test.py` | 2.7-3: the build runs the whole sign-up / forgot-password flow with mails written to files. |
+| `api/utils/farooq_captcha.go` (+ `_test.go`) | 2.7-5: our own drawing of the picture code (see below). |
 
 Upstream changes made by `apply-patches.py`: Arabic + Urdu in the language list; a browser language such as en-US,
 ur-PK or ar-QA opens its own language (upstream showed raw keys for en-US); `dir="rtl"` + `lang` on `<html>`; a missing
@@ -52,3 +53,14 @@ with crossing lines at 150×50. `utils/captcha.go` now draws **4 digits 2–9** 
 (wqy-microhei) at 200×64 with only a thin wave line; the sign-up and forgot-password pages show it full size above its
 box, with an «Another picture» link and a number keypad on phones. The admin login's picture code (after 3 wrong
 passwords) uses the same drawing. The e-mail code and the limits stay the real protection.
+
+## 2.7-5 — the picture code drawn by us (owner 1 Nov 2026)
+
+2.7-4 was built but never installed: its build pictures still showed upstream's drawer giving each digit a random size
+and a random colour (some pale grey or light green) and a wide wave band through the digits. `utils/farooq_captcha.go`
+(`FrDrawDigits`) now draws the picture itself: every digit the same big size (wqy-microhei, a little bold) in one of
+seven dark colours, slightly shifted, on a near-white background, with only one faint line and a few faint dots
+behind. It is drawn at 400×128 and shown at 200×64, so it stays sharp when the page is zoomed. Upstream's generator
+still chooses the digits (`capdString`: 2–9, 4 long); `captcha.go`'s string provider calls `FrDrawDigits`, so the admin
+login's picture code is the same. `go test -run TestFrDrawDigits ./utils/` checks size, dark digits and a light
+background before the build.

@@ -14,6 +14,8 @@ name: Farooq Remote - account server (linux-arm64)
 # The test runs the whole sign-up with mails written to files (ci/signup_test.py); no mail leaves the runner.
 # 2.7-4 (owner 1 Nov 2026, «Captcha code very hard to read»): the picture code is 4 clear digits in one plain font, bigger,
 # shown above its box with its own «Another picture» link.
+# 2.7-5: our own drawing of the picture code (utils/farooq_captcha.go): one big size, dark colours, a little bold, only
+# a faint line behind; drawn at 400x128 and shown at 200x64 (2.7-4 still had random sizes, pale colours and a wave band).
 #
 # Runs when this file or farooqremote/accounts/ is pushed to farooq/develop (or from the Actions tab). master stays the
 # upstream mirror. No secrets are used - only this run's own GITHUB_TOKEN, to publish the release.
@@ -35,9 +37,9 @@ env:
   WEB_COMMIT: 3998c2a9213fcd047252776d0f0db33e6717026c   # master when v2.7 was released (31 Aug 2025)
   GO_VERSION: "1.23.10"                                    # the toolchain line of rustdesk-api go.mod
   NODE_VERSION: "20"                                       # as upstream build.yml
-  RELEASE_TAG: accounts-2.7-4
-  ASSET: farooqremote-accounts-2.7-4-linux-arm64.tar.gz
-  SCREENS: farooqremote-accounts-2.7-4-screens.zip
+  RELEASE_TAG: accounts-2.7-5
+  ASSET: farooqremote-accounts-2.7-5-linux-arm64.tar.gz
+  SCREENS: farooqremote-accounts-2.7-5-screens.zip
   PLAYWRIGHT_VERSION: "1.49.1"
 
 jobs:
@@ -108,6 +110,7 @@ jobs:
           go version
           go mod tidy
           go test ./lib/frsignup/
+          go test -v -run TestFrDrawDigits ./utils/
           echo "$API_VERSION" > resources/version
           CC=musl-gcc CGO_ENABLED=1 CGO_LDFLAGS="-static" go build -trimpath -ldflags "-s -w" -o apimain ./cmd/apimain.go
           file apimain || true

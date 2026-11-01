@@ -188,14 +188,23 @@ replace_once(p, "\tu := &model.User{}\n\tDB.Where(\"username = ?\", username).Fi
              "\t}\n"
              "\tif u.Id == 0 {\n\t\treturn u\n\t}\n\tok, newHash, err := utils.VerifyPassword(u.Password, password)\n")
 
-# 11. server: the picture code (owner 1 Nov 2026: «Captcha code very hard to read») - 4 digits 2-9 in one plain font,
-#     bigger, with only a thin wave line (upstream: letters + digits in decorative fonts with crossing lines). Also used by
-#     the admin login after 3 wrong passwords.
+# 11. server: the picture code (owner 1 Nov 2026: «Captcha code very hard to read») - 4 digits 2-9 (no 0/O or 1/l
+#     mix-up; upstream: letters + digits in decorative fonts with crossing lines), drawn by our own utils/farooq_captcha.go:
+#     one big size, dark colours, a little bold, only a faint line behind (2.7-4 still used upstream's drawer, whose
+#     random sizes, pale colours and wave band were still hard). Also used by the admin login after 3 wrong passwords.
 p = os.path.join(API, 'utils/captcha.go')
 replace_once(p, 'var capdString = base64Captcha.NewDriverString(50, 150, 0, 5, 4, "123456789abcdefghijklmnopqrstuvwxyz", nil, nil,\n'
              '\t[]string{"3Dumb.ttf", "ApothecaryFont.ttf", "Comismsh.ttf", "Flim-Flam.ttf", "RitaSmith.ttf", "wqy-microhei.ttc"})\n',
-             '// Farooq Remote: 4 clear digits (2-9, no 0/O or 1/l mix-up) in one plain font, bigger, only a thin wave line\n'
-             'var capdString = base64Captcha.NewDriverString(64, 200, 0, base64Captcha.OptionShowSineLine, 4, "23456789", nil, nil,\n'
+             '// Farooq Remote: the code is 4 digits 2-9 (no 0/O or 1/l mix-up); the picture is drawn by FrDrawDigits\n'
+             'var capdString = base64Captcha.NewDriverString(64, 200, 0, 0, 4, "23456789", nil, nil,\n'
              '\t[]string{"wqy-microhei.ttc"})\n')
+replace_once(p, 'func (p B64StringCaptchaProvider) Draw(content string) (string, error) {\n'
+             '\titem, err := capdString.DrawCaptcha(content)\n'
+             '\tif err != nil {\n\t\treturn "", err\n\t}\n'
+             '\tb64str := item.EncodeB64string()\n'
+             '\treturn b64str, nil\n}\n',
+             'func (p B64StringCaptchaProvider) Draw(content string) (string, error) {\n'
+             '\t// Farooq Remote: our own clear picture (farooq_captcha.go)\n'
+             '\treturn FrDrawDigits(content)\n}\n')
 
 print('== done')
