@@ -1,0 +1,302 @@
+name: Farooq Remote - account server (linux-amd64)
+
+# 17 Nov 2026 (AI1-Claude1): the Oracle VM (ARM) is gone - the account server moves to the Hostinger VPS (x86_64).
+# The same build as farooq-accounts.yml (2.7-10, unchanged patches) on GitHub's x86_64 runner, released as
+# accounts-2.7-10-amd64 (the arm64 release accounts-2.7-10 stays as it is). Run it from the Actions tab.
+
+# FA-020 Farooq Remote, Phase 5 (plan 0-docs/0018 EN + 0019 UR; owner approval A1, 1 Nov 2026).
+# Builds the account server lejianwen/rustdesk-api 2.7 (MIT) and its admin page lejianwen/rustdesk-api-web (MIT)
+# from PINNED source on GitHub's own ARM runner, tests that the program starts and answers, and publishes it as a
+# release of this repository with its SHA256. FR-08-ACCOUNTS.bat installs it on the Oracle VM and checks that SHA256.
+# 2.7-2 (owner 1 Nov 2026, «add Arabic & Urdu ... with URDU naskh fonts»): farooqremote/accounts/apply-patches.py adds
+# Urdu + Arabic (words, labels, server messages, right-to-left, the Naskh font FS Urdu) before the build, and the run
+# takes pictures of the admin page in English, Urdu and Arabic (ci/screens.mjs, demo data only) for the release.
+# 2.7-3 (owner 1 Nov 2026, «make system from app user can Register this App by Email id and password»): anyone can make
+# an account with an e-mail address + password, proved by a 6-digit e-mail code, and «forgot password» by e-mail code
+# (lib/frsignup, http/controller/admin/farooq_signup.go, web register/index.vue + register/forgot.vue); the app login
+# accepts the address (up to 100 letters, any case); wrong picture or e-mail codes count for upstream's ban limiter.
+# The test runs the whole sign-up with mails written to files (ci/signup_test.py); no mail leaves the runner.
+# 2.7-4 (owner 1 Nov 2026, «Captcha code very hard to read»): the picture code is 4 clear digits in one plain font, bigger,
+# shown above its box with its own «Another picture» link.
+# 2.7-5: our own drawing of the picture code (utils/farooq_captcha.go): one big size, dark colours, a little bold, only
+# a faint line behind; drawn at 400x128 and shown at 200x64 (2.7-4 still had random sizes, pale colours and a wave band).
+# 2.7-6: Farooq Remote's own icon as the account website's logo and browser-tab icon (upstream: the RustDesk logo), and the
+# tab title «Farooq Remote» from the first moment.
+# 2.7-7: the company logo in the welcome box (web/public/company-logo.png + hello.html), the app icon at the top of the
+# sign-up / password mails (inside the mail, cid:), and the build pictures without passing message boxes.
+# 2.7-8: the company logo made on a white canvas, as WebP (2.7-7's logo had a black frame from a crop past its edges).
+# 2.7-9: «easy access» like TeamViewer's (lib/freasy, controller api/farooq_easy.go): one-time tickets for the owner's own
+# computers that allow it; tested by ci/easy_test.py after a fresh start.
+# 2.7-10: easy access after a security review: the target's key travels with the ticket, only a computer signed in to
+# the same account gets one, every ticket request counts in the limit, caps on the memory tables.
+#
+# Runs when this file or farooqremote/accounts/ is pushed to farooq/develop (or from the Actions tab). master stays the
+# upstream mirror. No secrets are used - only this run's own GITHUB_TOKEN, to publish the release.
+
+on:
+  push:
+    branches: [ "farooq/develop" ]
+    paths: [ ".github/workflows/farooq-accounts-amd64.yml" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  API_REPO: lejianwen/rustdesk-api
+  API_COMMIT: 222792419f8b55c17b36bf5f423ec5ed7a53e2c4   # tag v2.7, 28 Sep 2025
+  API_VERSION: "2.7"
+  WEB_REPO: lejianwen/rustdesk-api-web
+  WEB_COMMIT: 3998c2a9213fcd047252776d0f0db33e6717026c   # master when v2.7 was released (31 Aug 2025)
+  GO_VERSION: "1.23.10"                                    # the toolchain line of rustdesk-api go.mod
+  NODE_VERSION: "20"                                       # as upstream build.yml
+  RELEASE_TAG: accounts-2.7-10-amd64
+  ASSET: farooqremote-accounts-2.7-10-linux-amd64.tar.gz
+  SCREENS: farooqremote-accounts-2.7-10-amd64-screens.zip
+  PLAYWRIGHT_VERSION: "1.49.1"
+
+jobs:
+  build:
+    name: Build, test, release (linux-amd64)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Source - this repository (the Farooq patches)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: fr
+          persist-credentials: false
+
+      - name: Source - rustdesk-api (pinned)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ env.API_REPO }}
+          ref: ${{ env.API_COMMIT }}
+          path: api
+          persist-credentials: false
+
+      - name: Source - rustdesk-api-web (pinned)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ env.WEB_REPO }}
+          ref: ${{ env.WEB_COMMIT }}
+          path: web
+          persist-credentials: false
+
+      - name: Check the pinned commits
+        run: |
+          test "$(git -C api rev-parse HEAD)" = "$API_COMMIT"
+          test "$(git -C web rev-parse HEAD)" = "$WEB_COMMIT"
+          echo "rustdesk-api     $(git -C api rev-parse HEAD)"
+          echo "rustdesk-api-web $(git -C web rev-parse HEAD)"
+          uname -m
+
+      - name: Farooq patches - Urdu + Arabic, right-to-left, the Naskh font
+        run: python3 fr/farooqremote/accounts/apply-patches.py api web
+
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: false
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Build the admin page (rustdesk-api-web)
+        working-directory: web
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          rm -rf ../api/resources/admin
+          mkdir -p ../api/resources/admin
+          cp -a dist/. ../api/resources/admin/
+          ls -la ../api/resources/admin
+
+      - name: Build the program (static, musl)
+        working-directory: api
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q musl-tools
+          go version
+          go mod tidy
+          go test -v ./lib/frsignup/ ./lib/freasy/
+          go test -v -run TestFrDrawDigits ./utils/
+          echo "$API_VERSION" > resources/version
+          CC=musl-gcc CGO_ENABLED=1 CGO_LDFLAGS="-static" go build -trimpath -ldflags "-s -w" -o apimain ./cmd/apimain.go
+          file apimain || true
+          ls -la apimain
+
+      - name: Test - first start, password reset, answers, wrong and right login
+        working-directory: api
+        run: |
+          set -u
+          T="$RUNNER_TEMP/fr-test"
+          rm -rf "$T"; mkdir -p "$T/conf/admin" "$T/data" "$T/runtime" "$T/resources"
+          cp apimain "$T/"
+          cp -a resources/admin resources/i18n resources/public resources/templates resources/version "$T/resources/"
+          echo "### test {{username}}" > "$T/conf/admin/hello.html"
+          cat > "$T/conf/config.yaml" <<'CONF'
+          lang: "en"
+          app:
+            web-client: 0
+            register: false
+            register-status: 1
+            captcha-threshold: 3
+            ban-threshold: 10
+            show-swagger: 0
+            token-expire: 720h
+            web-sso: false
+            disable-pwd-login: false
+          admin:
+            title: "Farooq Remote"
+            hello-file: "./conf/admin/hello.html"
+            hello: ""
+            id-server-port: 21116
+            relay-server-port: 21117
+          gin:
+            api-addr: "127.0.0.1:21114"
+            mode: "release"
+            resources-path: "resources"
+            trust-proxy: "127.0.0.1"
+          gorm:
+            type: "sqlite"
+            max-idle-conns: 10
+            max-open-conns: 100
+          rustdesk:
+            id-server: "test.invalid:21116"
+            relay-server: "test.invalid:21117"
+            api-server: "https://test.invalid"
+            key: "test-key"
+            key-file: ""
+            personal: 1
+            webclient-magic-queryonline: 0
+            ws-host: ""
+          logger:
+            path: "./runtime/log.txt"
+            level: "info"
+            report-caller: false
+          proxy:
+            enable: false
+            host: ""
+          jwt:
+            key: "ci-only-signing-key"
+            expire-duration: 720h
+          ldap:
+            enable: false
+          CONF
+          cp "$T/conf/config.yaml" "$RUNNER_TEMP/fr-config.yaml"
+          cd "$T"
+          PW="ci-$(openssl rand -hex 8)"
+          # first run through the command line: creates the database + the admin, then sets a known password
+          ./apimain -c ./conf/config.yaml reset-admin-pwd "$PW" > reset.out 2>&1
+          test -s data/rustdeskapi.db
+          grep -q "reset password success" runtime/log.txt
+          echo "start-up password lines in the log (expected 1): $(grep -c 'Admin Password Is' runtime/log.txt)"
+          # FR_MAIL_TEST_DIR: sign-up mails and picture-code answers are written there (tests only)
+          FR_MAIL_TEST_DIR="$T/mails" ./apimain -c ./conf/config.yaml > run.out 2>&1 &
+          APID=$!
+          for i in $(seq 1 30); do sleep 1; curl -fs -o /dev/null http://127.0.0.1:21114/api/login-options && break; done
+          code() { curl -s -o /dev/null -w '%{http_code}' "$@"; }
+          test "$(code http://127.0.0.1:21114/api/login-options)" = 200
+          test "$(code http://127.0.0.1:21114/_admin/)" = 200
+          test "$(code http://127.0.0.1:21114/webclient/)" = 404
+          c=$(curl -s -o wrong.json -w '%{http_code}' -H 'Content-Type: application/json' -d '{"username":"admin","password":"wrong-pass-1"}' http://127.0.0.1:21114/api/login)
+          echo "wrong login -> $c $(cat wrong.json)"; test "$c" = 400
+          c=$(curl -s -o right.json -w '%{http_code}' -H 'Content-Type: application/json' -d "{\"username\":\"admin\",\"password\":\"$PW\"}" http://127.0.0.1:21114/api/login)
+          echo "right login -> $c"; test "$c" = 200; grep -q '"access_token"' right.json
+          echo "login-options: $(curl -s http://127.0.0.1:21114/api/login-options)"
+          c=$(curl -s -o ur.json -w '%{http_code}' -H 'Accept-Language: ur' -H 'Content-Type: application/json' -d '{"username":"admin","password":"wrong-pass-2"}' http://127.0.0.1:21114/api/login)
+          echo "wrong login in Urdu -> $c $(cat ur.json)"; grep -q 'صارف نام یا پاس ورڈ غلط ہے' ur.json
+          c=$(curl -s -o ar.json -w '%{http_code}' -H 'Accept-Language: ar' -H 'Content-Type: application/json' -d '{"username":"admin","password":"wrong-pass-3"}' http://127.0.0.1:21114/api/login)
+          echo "wrong login in Arabic -> $c $(cat ar.json)"; grep -q 'اسم المستخدم أو كلمة المرور غير صحيحة' ar.json
+          FR_ADMIN_DIR="$T/resources/admin" python3 "$GITHUB_WORKSPACE/fr/farooqremote/accounts/ci/signup_test.py" http://127.0.0.1:21114 "$T/mails" "$PW"
+          echo "server log lines of the sign-up:"; grep -a "FR " runtime/log.txt | tail -20 || true
+          kill "$APID" || true
+          wait "$APID" 2>/dev/null || true
+          # easy access (2.7-9, 2.7-10): a fresh start (the sign-up test ends with this address stopped by the limiter)
+          ./apimain -c ./conf/config.yaml > run2.out 2>&1 &
+          APID=$!
+          for i in $(seq 1 30); do sleep 1; curl -fs -o /dev/null http://127.0.0.1:21114/api/login-options && break; done
+          python3 "$GITHUB_WORKSPACE/fr/farooqremote/accounts/ci/easy_test.py" http://127.0.0.1:21114 "$PW" new.user@example.com New-pass-456
+          kill "$APID" || true
+          echo "TEST PASSED"
+
+      - name: Pictures - the admin page in English, Urdu and Arabic (demo data)
+        working-directory: api
+        run: |
+          set -u
+          sudo apt-get install -y -q sqlite3 > /dev/null
+          T="$RUNNER_TEMP/fr-shots"
+          rm -rf "$T"; mkdir -p "$T/conf/admin" "$T/data" "$T/runtime" "$T/resources"
+          cp apimain "$T/"
+          cp -a resources/admin resources/i18n resources/public resources/templates resources/version "$T/resources/"
+          cp "$GITHUB_WORKSPACE/fr/farooqremote/accounts/hello.html" "$T/conf/admin/hello.html"
+          cp "$RUNNER_TEMP/fr-config.yaml" "$T/conf/config.yaml"
+          cd "$T"
+          PW="ci-$(openssl rand -hex 8)"
+          ./apimain -c ./conf/config.yaml reset-admin-pwd "$PW" > reset.out 2>&1
+          sqlite3 data/rustdeskapi.db < "$GITHUB_WORKSPACE/fr/farooqremote/accounts/ci/demo.sql"
+          FR_MAIL_TEST_DIR="$T/mails" ./apimain -c ./conf/config.yaml > run.out 2>&1 &
+          APID=$!
+          for i in $(seq 1 30); do sleep 1; curl -fs -o /dev/null http://127.0.0.1:21114/api/login-options && break; done
+          mkdir -p "$RUNNER_TEMP/pw" && cd "$RUNNER_TEMP/pw"
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund "playwright@$PLAYWRIGHT_VERSION" > /dev/null
+          npx playwright install --with-deps chromium > /dev/null
+          cp "$GITHUB_WORKSPACE/fr/farooqremote/accounts/ci/screens.mjs" .
+          BASE=http://127.0.0.1:21114/_admin/ FR_USER=admin FR_PASS="$PW" OUT="$GITHUB_WORKSPACE/screens" MAILS="$T/mails" node screens.mjs
+          kill "$APID" || true
+          cd "$GITHUB_WORKSPACE"
+          ls -la screens
+          python3 -m zipfile -c "$SCREENS" screens/
+
+      - name: Package
+        run: |
+          R=release
+          rm -rf "$R"; mkdir -p "$R/resources" "$R/conf/admin" "$R/data" "$R/runtime"
+          cp api/apimain "$R/"
+          cp -a api/resources/admin api/resources/i18n api/resources/public api/resources/templates api/resources/version "$R/resources/"
+          cp api/conf/config.yaml "$R/conf/config.yaml.upstream"
+          cp fr/farooqremote/accounts/hello.html "$R/conf/admin/hello.html"
+          cp api/LICENSE "$R/LICENSE-rustdesk-api.txt"
+          cp web/LICENSE "$R/LICENSE-rustdesk-api-web.txt"
+          {
+            echo "Farooq Remote account server - lejianwen/rustdesk-api $API_VERSION for linux-amd64 (static, musl)"
+            echo "rustdesk-api     https://github.com/$API_REPO commit $API_COMMIT (MIT)"
+            echo "rustdesk-api-web https://github.com/$WEB_REPO commit $WEB_COMMIT (MIT)"
+            echo "Farooq patches: https://github.com/$GITHUB_REPOSITORY/tree/$GITHUB_SHA/farooqremote/accounts (Urdu + Arabic, right-to-left, FS Urdu = Noto Naskh Arabic, OFL; sign-up + forgot password by e-mail code)"
+            echo "built by https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID on $(date -u +%FT%TZ), $(go version)"
+            echo "settings are written on the server by fr-08-accounts.sh; conf/config.yaml.upstream is the original for reference"
+          } > "$R/FAROOQ-BUILD.txt"
+          cat "$R/FAROOQ-BUILD.txt"
+          tar --owner=0 --group=0 --numeric-owner -czf "$ASSET" "$R"
+          sha256sum "$ASSET" | tee SHA256SUMS.txt
+          ls -la "$ASSET"
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "Farooq Remote account server for the Hostinger VPS (linux-amd64): lejianwen/rustdesk-api $API_VERSION + its admin page,"
+            echo "built from pinned source by run https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID."
+            echo
+            echo "- rustdesk-api: https://github.com/$API_REPO/commit/$API_COMMIT (MIT)"
+            echo "- rustdesk-api-web: https://github.com/$WEB_REPO/commit/$WEB_COMMIT (MIT)"
+            echo "- Farooq patches: Urdu + Arabic (words, labels, server messages), right-to-left, the Naskh font FS Urdu (Noto Naskh Arabic, OFL); sign-up with an e-mail address + password proved by a 6-digit e-mail code, and forgot password by e-mail code (mail settings come from the server's environment, written by FR-11) - farooqremote/accounts/ at $GITHUB_SHA"
+            echo "- Pictures of the admin page in English, Urdu and Arabic (demo data): \`$SCREENS\`"
+            echo "- SHA256: \`$(cut -d' ' -f1 SHA256SUMS.txt)\`"
+            echo
+            echo "Installed by FR-08-ACCOUNTS.bat / FR-10 / FR-11 (FA-020). Not a RustDesk server release."
+          } > notes.md
+          # a rebuild of the same version replaces its release (before it is installed anywhere), so notes + target stay true
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            gh release delete "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag
+            sleep 5
+          fi
+          gh release create "$RELEASE_TAG" "$ASSET" SHA256SUMS.txt "$SCREENS" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Farooq Remote accounts ${RELEASE_TAG#accounts-} (linux-amd64)" --notes-file notes.md --prerelease
+          echo "release: https://github.com/$GITHUB_REPOSITORY/releases/tag/$RELEASE_TAG"
